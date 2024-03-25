@@ -55,9 +55,9 @@ carregaAleatorios
 	LDR R2, =TAMANHO			; carrega em r2 o tamanho do vetor
 	MOV R6, #0					; inicializa um contador para armazenar o tamanho da lista a ser ordenada
 	MOV R3, #0					; inicia um contador da lista de aleatorios
-	LDRB R4, [R1], #1			; r4 recebe o valor guardado no endereco de r1
 	
 reiniciaFibonacci
+	LDRB R4, [R1], #1			; r4 recebe o valor guardado no endereco de r1
 	MOV R7, #0					; a(n-2) da sequencia de fibonacci
 	MOV R8, #1					; a(n-1) da sequencia de fibonacci
 	
@@ -74,8 +74,6 @@ fibonacci
 proximoLista
 	ADD R3, R3, #1				; contador ++
 	CMP R2, R3					; verifica se o contador atingiu o tamanho do vetor
-	IT NE
-		LDRBNE R4, [R1], #1		; r4 recebe o valor guardado no endereco de r1 se o numero da lista do menos que an
 	BNE reiniciaFibonacci 
 	
 
