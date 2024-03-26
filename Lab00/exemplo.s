@@ -37,18 +37,21 @@ TAMANHO EQU 23
 ; -------------------------------------------------------------------------------
 ; Funcao main()
 Start  
-; Comece o codigo aqui <======================================================
+; --------------------- Carregar sequencia aleatória para a memória ------------------------
 	LDR R0, =valores 			; carrega em r0 o endereco inicial do vetor valores
 	LDR R1, =ALEATORIOS 		; carrega em r1 o endereco inicial da RAM para salvar
 	LDR R2, =TAMANHO			; carrega em r2 o tamanho do vetor
 	MOV R3, #0					; inicia um contador
 
 carregaAleatorios
-	LDRB R4, [R0], #1		; r4 recebe o valor guardado no endereco de r0
-	STRB R4, [R1], #1		; endereco guardado em r1 recebe o valor de r4
-	ADD R3, R3, #1			; contador ++
-	CMP R2, R3				; verifica se o contador atingiu o tamanho do vetor
+	LDRB R4, [R0], #1			; r4 recebe o valor guardado no endereco de r0
+	STRB R4, [R1], #1			; endereco guardado em r1 recebe o valor de r4
+	ADD R3, R3, #1				; contador ++
+	CMP R2, R3					; verifica se o contador atingiu o tamanho do vetor
 	BNE carregaAleatorios
+	
+; --------------------- Varredura da lista para encontrar quais estão na serie de fibonacci ------------------------
+; como ficará a lista: {3, 233, 1, 13, 21, 34, 2, 8, 89, 5, 144, 55}
 	
 	LDR R5, =ORDENADOS			; carrega em r5 o endereco inicial do RAM para salvar os numeros a serem ordenados
 	LDR R1, =ALEATORIOS 		; carrega em r1 o endereco inicial da RAM para ler os valores da lista
@@ -78,8 +81,36 @@ proximoLista
 		LDRBNE R4, [R1], #1		; r4 recebe o valor guardado no endereco de r1 se o numero da lista do menos que an
 	BNE reiniciaFibonacci 
 	
+; --------------------- Ordenar com insertion sort ------------------------
+	LDR R5, =ORDENADOS			; carrega em r5 o endereco inicial do RAM para ler os numeros a serem ordenados
+	MOV R1, #1					; contador fixo para o elemento chave
+	MOV R0, #1					; contador de troca para o elemento chave
+	MOV R2, #0					; contador para os elementos adjacentes
+	MOV R3, #1 					; contador para ver quando chegar no tamanho final da lista (comparar com r6)
 
-
+iteracao
+	LDRB R4, [R5, R0]			; r4 recebe o valor guardado no endereco de r5 + o contador da chave, sera o elemento chave
+	LDRB R7, [R5, R2]			; r7 recebe o valor guardado no endereco de r5 + o contador do adjacente, sera o elemento adjacente
+	CMP R4, R7					
+	ITT LO						; se r4 (elemento chave) for menor que r7 (elemento adjacente), trocam de posicao]
+		STRBLO R7, [R5, R0]		; endereco guardado em r5 + contador da chave recebe o valor de r7 (elemento adjacente)
+		STRBLO R4, [R5, R2]		; endereco guardado em r5 + contador da adjacente recebe o valor de r4 (elemento chave)
+	CMP R2, #0
+	ITT NE						; se r2 não for igual a zero, não está no inicio da lista
+		SUBNE R2, R2, #1		; contador do adjacente --
+		SUBNE R0, R0, #1		; contador da chave --
+	BNE iteracao
+	BEQ proximo
+	
+proximo
+	CMP R3, R6
+	ITTTT NE
+		MOVNE R2, R1
+		ADDNE R1, R1, #1
+		MOVNE R0, R1
+		ADDNE R3, R3, #1
+	BNE iteracao
+	
 	
 valores DCB 3, 244, 14, 233, 1, 6, 9, 18, 13, 254, 21, 34, 2, 67, 135,  8, 89, 43, 5, 105, 144, 201, 55
 	NOP
