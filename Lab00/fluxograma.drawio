@@ -1,0 +1,277 @@
+<mxfile host="app.diagrams.net" modified="2024-03-27T12:27:08.843Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="ghmcRltRsINok7Wfc8Ws" version="24.2.0" type="device">
+  <diagram name="Página-1" id="z7Kyw3hJ4gh4SX8RpaoI">
+    <mxGraphModel dx="1674" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uVq4-iv9dat1r1SWp7oT-1" target="uVq4-iv9dat1r1SWp7oT-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-1" value="Início" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="140" y="90" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uVq4-iv9dat1r1SWp7oT-2" target="uVq4-iv9dat1r1SWp7oT-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-2" value="&amp;nbsp; &amp;nbsp; Inicializa registradores com&lt;br&gt;endereços iniciais da &lt;br&gt;memória RAM" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="265" y="80" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uVq4-iv9dat1r1SWp7oT-4" target="uVq4-iv9dat1r1SWp7oT-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-4" value="Inicializa contador para &lt;br&gt;acessar as próximas &lt;br&gt;posições da RAM" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="510" y="80" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uVq4-iv9dat1r1SWp7oT-6" target="uVq4-iv9dat1r1SWp7oT-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-6" value="Carrega o vetor de &lt;br&gt;valores aleatórios na &lt;br&gt;RAM" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="740" y="80" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uVq4-iv9dat1r1SWp7oT-8" target="uVq4-iv9dat1r1SWp7oT-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-8" value="Carrega registradores &lt;br&gt;com endereços iniciai&lt;span style=&quot;background-color: initial;&quot;&gt;s&lt;/span&gt;&lt;div&gt;da memória RAM&lt;/div&gt;" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="80" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="uVq4-iv9dat1r1SWp7oT-10" target="uVq4-iv9dat1r1SWp7oT-12" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1350" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-10" value="&amp;nbsp; &amp;nbsp;Inicializa contador para a &lt;br&gt;quantidade de valores da &lt;br&gt;sequência de Fibonacci" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1250" y="80" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="uVq4-iv9dat1r1SWp7oT-12" target="HQ6Ok3kCa06cyeRhy-Dh-25" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-12" value="Inicializa contador para &lt;br&gt;percorrer a lista de valores aleatórios" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="995" y="220" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uVq4-iv9dat1r1SWp7oT-14" target="uVq4-iv9dat1r1SWp7oT-16" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-14" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; Carrega dois registradores &lt;br&gt;&amp;nbsp; &amp;nbsp;(An-2 e An-1) com os termos &lt;br&gt;iniciais da sequência de &lt;br&gt;Fibonacci (0 e 1)" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="500" y="215" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="uVq4-iv9dat1r1SWp7oT-16" target="HQ6Ok3kCa06cyeRhy-Dh-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uVq4-iv9dat1r1SWp7oT-16" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; Carrega um registrador (An) &lt;br&gt;com a soma dos dois termos anteriores (An-1 e An-2)" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="272.5" y="220" width="185" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-5" target="HQ6Ok3kCa06cyeRhy-Dh-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-5" value="Move o valor de An-1 para An-2 e An para An-1" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="305" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-7" target="HQ6Ok3kCa06cyeRhy-Dh-9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-12" value="NÃO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-10" vertex="1" connectable="0">
+          <mxGeometry x="-0.0836" relative="1" as="geometry">
+            <mxPoint x="15" y="3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-7" target="HQ6Ok3kCa06cyeRhy-Dh-20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-23" value="SIM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-22" vertex="1" connectable="0">
+          <mxGeometry x="-0.6726" y="-5" relative="1" as="geometry">
+            <mxPoint x="-80" y="-15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-7" value="O valor da lista aleatória que &lt;br&gt;está sendo varrido é menor que &lt;br&gt;o valor do registrador An?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="225" y="470" width="280" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-9" target="uVq4-iv9dat1r1SWp7oT-16" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="250" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="140" y="670" />
+              <mxPoint x="140" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-14" value="NÃO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-13" vertex="1" connectable="0">
+          <mxGeometry x="-0.8743" y="1" relative="1" as="geometry">
+            <mxPoint y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-9" target="HQ6Ok3kCa06cyeRhy-Dh-15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-19" value="SIM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-16" vertex="1" connectable="0">
+          <mxGeometry x="-0.0462" y="1" relative="1" as="geometry">
+            <mxPoint x="-1" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-9" value="O valor da lista aleatória que&lt;br&gt;está sendo varrido é igual ao&lt;br&gt;o valor do registrador An?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="227.5" y="630" width="275" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-15" target="HQ6Ok3kCa06cyeRhy-Dh-17" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-15" value="Salva o número pertencente a Fibonacci na memória RAM" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="585" y="640" width="155" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-17" target="HQ6Ok3kCa06cyeRhy-Dh-20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-17" value="Incrementa o contador do tamanho da lista com os elementos de Fibonacci e o contador total da lista aleatória" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="790" y="635" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-20" target="HQ6Ok3kCa06cyeRhy-Dh-25" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1220" y="670" />
+              <mxPoint x="1220" y="370" />
+              <mxPoint x="850" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-30" value="NÃO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-29" vertex="1" connectable="0">
+          <mxGeometry x="-0.9598" y="3" relative="1" as="geometry">
+            <mxPoint x="-1" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-20" target="HQ6Ok3kCa06cyeRhy-Dh-31" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-33" value="SIM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-32" vertex="1" connectable="0">
+          <mxGeometry x="-0.2484" y="2" relative="1" as="geometry">
+            <mxPoint x="11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-20" value="Lista de números &lt;br&gt;aleatórios foi toda &lt;br&gt;percorrida?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="990" y="630" width="195" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-25" target="uVq4-iv9dat1r1SWp7oT-14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-25" value="Carrega registrador com o próximo valor da lista aleatória" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="790" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-31" target="HQ6Ok3kCa06cyeRhy-Dh-35" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-31" value="Inicia insertion sort" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1027.5" y="800" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-35" target="HQ6Ok3kCa06cyeRhy-Dh-39" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-35" value="Carrega registrador com o endereço inicial da RAM com a lista a ser ordenada" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="766.25" y="795" width="197.5" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-39" target="HQ6Ok3kCa06cyeRhy-Dh-41" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-39" value="Inicializa contador fixo para o elemento chave, contador de troca para o elemento chave, contador para elementos adjacentes e contador do total percorrido" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="488.75" y="795" width="197.5" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-46" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-41" target="HQ6Ok3kCa06cyeRhy-Dh-45" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-41" value="Registrador = endereço inicial + contador chave,&lt;br&gt;Registrador = endereço inicial + contador adjacente" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="800" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-48" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-45" target="HQ6Ok3kCa06cyeRhy-Dh-47" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-49" value="SIM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-48" vertex="1" connectable="0">
+          <mxGeometry x="-0.1963" y="-2" relative="1" as="geometry">
+            <mxPoint y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-54" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-45" target="HQ6Ok3kCa06cyeRhy-Dh-53" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-55" value="NÃO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-54" vertex="1" connectable="0">
+          <mxGeometry x="-0.3299" y="1" relative="1" as="geometry">
+            <mxPoint x="14" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-45" value="Valor chave é menor&lt;br&gt;&amp;nbsp;que valor adjacente?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="247.5" y="940" width="175" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-47" target="HQ6Ok3kCa06cyeRhy-Dh-53" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="1140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-47" value="Troca os valores de posição" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="510" y="950" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-58" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-53" target="HQ6Ok3kCa06cyeRhy-Dh-57" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-59" value="NÃO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-58" vertex="1" connectable="0">
+          <mxGeometry x="-0.0131" y="2" relative="1" as="geometry">
+            <mxPoint x="18" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-66" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-53" target="HQ6Ok3kCa06cyeRhy-Dh-65" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-67" value="SIM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-66" vertex="1" connectable="0">
+          <mxGeometry x="-0.0902" y="-1" relative="1" as="geometry">
+            <mxPoint x="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-53" value="Contador de &lt;br&gt;elementos adjacentes &lt;br&gt;chegou em zero?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="248.75" y="1100" width="172.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-57" target="HQ6Ok3kCa06cyeRhy-Dh-41" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="830" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-57" value="Decrementa contador do elemento chave e do elemento adjacente" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="1109" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-69" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-65" target="HQ6Ok3kCa06cyeRhy-Dh-68" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-70" value="NÃO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-69" vertex="1" connectable="0">
+          <mxGeometry x="0.0096" y="-2" relative="1" as="geometry">
+            <mxPoint x="-6" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-74" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-65" target="HQ6Ok3kCa06cyeRhy-Dh-73" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-75" value="SIM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=default;" parent="HQ6Ok3kCa06cyeRhy-Dh-74" vertex="1" connectable="0">
+          <mxGeometry x="-0.1335" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-65" value="A lista a ser &lt;br&gt;ordenada foi toda percorrida?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="256.25" y="1260" width="157.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="HQ6Ok3kCa06cyeRhy-Dh-68" target="HQ6Ok3kCa06cyeRhy-Dh-41" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="10" y="1300" />
+              <mxPoint x="10" y="780" />
+              <mxPoint x="335" y="780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-68" value="Incrementa contador do elemento chave,&amp;nbsp; do elemento adjacente e do total percorrido" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="1265" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HQ6Ok3kCa06cyeRhy-Dh-73" value="Fim" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="505" y="1285" width="77.5" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
