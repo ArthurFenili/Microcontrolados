@@ -84,7 +84,7 @@ proximoLista
 	MOV R1, #1					; contador fixo para o elemento chave
 	MOV R0, #1					; contador de troca para o elemento chave
 	MOV R2, #0					; contador para os elementos adjacentes
-	MOV R3, #1 					; contador para ver quando chegar no tamanho final da lista (comparar com r6)
+	MOV R3, #2 					; contador para ver quando chegar no tamanho final da lista (comparar com r6)
 
 iteracao
 	LDRB R4, [R5, R0]			; r4 recebe o valor guardado no endereco de r5 + o contador da chave, sera o elemento chave
@@ -103,10 +103,10 @@ iteracao
 proximo
 	CMP R3, R6
 	ITTTT NE
-		MOVNE R2, R1
-		ADDNE R1, R1, #1
-		MOVNE R0, R1
-		ADDNE R3, R3, #1
+		MOVNE R2, R1			; se não estiver no final da lista, incrementa contador dos adjacentes
+		ADDNE R1, R1, #1		; incrementa contador fixo
+		MOVNE R0, R1			; incrementa contador variavel da chave
+		ADDNE R3, R3, #1		; incrementa contador para acompanhar a posicao da lista
 	BNE iteracao
 	
 	
