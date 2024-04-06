@@ -71,76 +71,86 @@ ARM Macro Assembler    Page 2
 
    45 00000000                 IMPORT           PortQ_Output
    46 00000000                 IMPORT           PortB_Output
-   47 00000000                 IMPORT           PortJ_Input
-   48 00000000         
+   47 00000000                 IMPORT           PortA_Output
+   48 00000000                 IMPORT           PortJ_Input
    49 00000000         
-   50 00000000         ; ------------------------------------------------------
+   50 00000000         ; Mapeamento dos 7 segmentos (0 a F)
+   51 00000000 3F 06 5B 
+              4F 66 6D 
+              7D 07 7F 
+              6F       MAPEAMENTO_7SEG
+                               DCB              0x3F, 0x06, 0x5B, 0x4F, 0x66, 0
+x6D, 0x7D, 0x07, 0x7F, 0x6F
+   52 0000000A         ; ------------------------------------------------------
                        -------------------------
-   51 00000000         ; Função main()
-   52 00000000         Start
-   53 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+   53 0000000A         ; Função main()
+   54 0000000A         Start
+   55 0000000A F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
                                                             para alterar o cloc
                                                             k do microcontrolad
                                                             or para 80MHz
-   54 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+   56 0000000E F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
                                                              para inicializar o
                                                              SysTick
-   55 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+   57 00000012 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
                                                             que inicializa os G
                                                             PIO
-   56 0000000C         
-   57 0000000C         MainLoop
-   58 0000000C F7FF FFFE       BL               PortJ_Input ;Chama a subrotina 
-                                                            que lê o estado das
-                                                             chaves e coloca o 
-                                                            resultado em R0
-   59 00000010         Verifica_Nenhuma
-   60 00000010 2801            CMP              R0, #2_00000001 ;Verifica se ne
-                                                            nhuma chave está pr
-                                                            essionada
-   61 00000012 D106            BNE              Verifica_SW1 ;Se o teste viu qu
-                                                            e tem pelo menos al
-                                                            guma chave pression
-                                                            ada pula
-   62 00000014 F04F 0000       MOV              R0, #0      ;Não acender nenhum
-                                                             LED
-   63 00000018 F7FF FFFE       BL               PortQ_Output
-   64 0000001C F7FF FFFE       BL               PortB_Output
-   65 00000020 E7F4            B                MainLoop    ;Se o teste viu que
-                                                             nenhuma chave está
-                                                             pressionada, volta
-                                                             para o laço princi
-                                                            pal
-   66 00000022         Verifica_SW1
-   67 00000022 2800            CMP              R0, #2_00000000 ;Verifica se so
-                                                            mente a chave SW1 e
-                                                            stá pressionada
-   68 00000024 D1F2            BNE              MainLoop    ;Se o teste falhou,
-                                                             pula
-   69 00000026 F04F 0001       MOV              R0, #2_00000001 ;Atualiza PQ0
-   70 0000002A F7FF FFFE       BL               PortQ_Output
-   71 0000002E F04F 0010       MOV              R0, #2_00010000 ; Ativa o trans
-                                                            istor do DS1 (PB4)
-   72 00000032 F7FF FFFE       BL               PortB_Output
-   73 00000036 E7E9            B                MainLoop
-   74 00000038         
-   75 00000038         ; ------------------------------------------------------
-                       --------------------------------------------------------
-                       -----------
-   76 00000038         ; Fim do Arquivo
+   58 00000016         
+   59 00000016 F8DF B024       LDR              R11, =MAPEAMENTO_7SEG ; Desloca
+                                                             escolhendo o respe
+                                                            ctivo número das un
+                                                            idades
+   60 0000001A         
+   61 0000001A         MainLoop
+   62 0000001A         ;Verifica_Nenhuma
+   63 0000001A         ; CMP R0, #2_00000001    ;Verifica se nenhuma chave está
+                        pressionada
+   64 0000001A         ; BNE Verifica_SW1    ;Se o teste viu que tem pelo menos
+                        alguma chave pressionada pula
+   65 0000001A         ; MOV R0, #0                   ;Não acender nenhum LED
+   66 0000001A         ; BL PortQ_Output
+   67 0000001A         ; BL PortB_Output
+   68 0000001A         ; B MainLoop      ;Se o teste viu que nenhuma chave está
+                        pressionada, volta para o laço principal
+   69 0000001A         ;Verifica_SW1 
+   70 0000001A         ; CMP R0, #2_00000000    ;Verifica se somente a chave SW
+                       1 está pressionada
+   71 0000001A         
+   72 0000001A F04F 0102       MOV              R1, #2      ; contador proximo 
+                                                            numero
+   73 0000001E         
+   74 0000001E F81B A001       LDRB             R10, [R11, R1]
+   75 00000022 F00A 00F0       AND              R0, R10, #2_11110000 ; Atualiza
+                                                             DSDP:DSE (PA7:PA4)
+                                                            
+   76 00000026 F7FF FFFE       BL               PortA_Output
+   77 0000002A F00A 000F       AND              R0, R10, #2_00001111 ; Atualiza
+                                                             DSD:DSA (PQ3:PQ0)
+   78 0000002E F7FF FFFE       BL               PortQ_Output
+   79 00000032 F04F 0030       MOV              R0, #2_00110000 ; Ativa o trans
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   77 00000038         ; ------------------------------------------------------
+                                                            istor do DS1 (PB4 e
+                                                             PB5)
+   80 00000036 F7FF FFFE       BL               PortB_Output
+   81 0000003A         
+   82 0000003A         
+   83 0000003A         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+   84 0000003A         ; Fim do Arquivo
+   85 0000003A         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-   78 00000038                 ALIGN                        ;Garante que o fim 
+   86 0000003A 00 00           ALIGN                        ;Garante que o fim 
                                                             da seção está alinh
                                                             ada 
-   79 00000038                 END                          ;Fim do arquivo
+   87 0000003C                 END                          ;Fim do arquivo
+              00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
 interwork --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\suzib\AppData
 \Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
@@ -175,41 +185,31 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-MainLoop 0000000C
+MAPEAMENTO_7SEG 00000000
+
+Symbol: MAPEAMENTO_7SEG
+   Definitions
+      At line 51 in file main.s
+   Uses
+      At line 59 in file main.s
+Comment: MAPEAMENTO_7SEG used once
+MainLoop 0000001A
 
 Symbol: MainLoop
    Definitions
-      At line 57 in file main.s
+      At line 61 in file main.s
    Uses
-      At line 65 in file main.s
-      At line 68 in file main.s
-      At line 73 in file main.s
-
-Start 00000000
+      None
+Comment: MainLoop unused
+Start 0000000A
 
 Symbol: Start
    Definitions
-      At line 52 in file main.s
+      At line 54 in file main.s
    Uses
       At line 35 in file main.s
 Comment: Start used once
-Verifica_Nenhuma 00000010
-
-Symbol: Verifica_Nenhuma
-   Definitions
-      At line 59 in file main.s
-   Uses
-      None
-Comment: Verifica_Nenhuma unused
-Verifica_SW1 00000022
-
-Symbol: Verifica_SW1
-   Definitions
-      At line 66 in file main.s
-   Uses
-      At line 61 in file main.s
-Comment: Verifica_SW1 used once
-5 symbols
+4 symbols
 
 
 
@@ -222,7 +222,7 @@ Symbol: GPIO_Init
    Definitions
       At line 44 in file main.s
    Uses
-      At line 55 in file main.s
+      At line 57 in file main.s
 Comment: GPIO_Init used once
 PLL_Init 00000000
 
@@ -230,55 +230,61 @@ Symbol: PLL_Init
    Definitions
       At line 41 in file main.s
    Uses
-      At line 53 in file main.s
+      At line 55 in file main.s
 Comment: PLL_Init used once
+PortA_Output 00000000
+
+Symbol: PortA_Output
+   Definitions
+      At line 47 in file main.s
+   Uses
+      At line 76 in file main.s
+Comment: PortA_Output used once
 PortB_Output 00000000
 
 Symbol: PortB_Output
    Definitions
       At line 46 in file main.s
    Uses
-      At line 64 in file main.s
-      At line 72 in file main.s
-
+      At line 80 in file main.s
+Comment: PortB_Output used once
 PortJ_Input 00000000
 
 Symbol: PortJ_Input
    Definitions
-      At line 47 in file main.s
+      At line 48 in file main.s
    Uses
-      At line 58 in file main.s
-Comment: PortJ_Input used once
+      None
+Comment: PortJ_Input unused
 PortQ_Output 00000000
 
 Symbol: PortQ_Output
    Definitions
       At line 45 in file main.s
    Uses
-      At line 63 in file main.s
-      At line 70 in file main.s
-
+      At line 78 in file main.s
+Comment: PortQ_Output used once
 SysTick_Init 00000000
 
 Symbol: SysTick_Init
    Definitions
       At line 42 in file main.s
    Uses
-      At line 54 in file main.s
+      At line 56 in file main.s
 Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
-   Definitions
-      At line 43 in file main.s
-   Uses
-      None
-Comment: SysTick_Wait1ms unused
-7 symbols
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 External symbols
 
-347 symbols in table
+   Definitions
+      At line 43 in file main.s
+   Uses
+      None
+Comment: SysTick_Wait1ms unused
+8 symbols
+349 symbols in table

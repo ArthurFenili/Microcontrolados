@@ -44,34 +44,42 @@
 		IMPORT  GPIO_Init
         IMPORT  PortQ_Output
 		IMPORT  PortB_Output
+		IMPORT  PortA_Output
         IMPORT  PortJ_Input	
 
-
+; Mapeamento dos 7 segmentos (0 a F)
+MAPEAMENTO_7SEG DCB	0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F
 ; -------------------------------------------------------------------------------
 ; Função main()
 Start  		
 	BL PLL_Init                  ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init              ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
+	
+	LDR R11, =MAPEAMENTO_7SEG	 ; Desloca escolhendo o respectivo número das unidades
 
 MainLoop
-	BL PortJ_Input				 ;Chama a subrotina que lê o estado das chaves e coloca o resultado em R0
-Verifica_Nenhuma
-	CMP	R0, #2_00000001			 ;Verifica se nenhuma chave está pressionada
-	BNE Verifica_SW1			 ;Se o teste viu que tem pelo menos alguma chave pressionada pula
-	MOV R0, #0                   ;Não acender nenhum LED
-	BL PortQ_Output
-	BL PortB_Output
-	B MainLoop					 ;Se o teste viu que nenhuma chave está pressionada, volta para o laço principal
-Verifica_SW1	
-	CMP R0, #2_00000000			 ;Verifica se somente a chave SW1 está pressionada
-	BNE MainLoop             	 ;Se o teste falhou, pula
-	MOV R0, #2_00000001			 ;Atualiza PQ0
-	BL PortQ_Output
-	MOV R0, #2_00010000			 ; Ativa o transistor do DS1 (PB4)
-	BL PortB_Output
-	B MainLoop
+;Verifica_Nenhuma
+;	CMP	R0, #2_00000001			 ;Verifica se nenhuma chave está pressionada
+;	BNE Verifica_SW1			 ;Se o teste viu que tem pelo menos alguma chave pressionada pula
+;	MOV R0, #0                   ;Não acender nenhum LED
+;	BL PortQ_Output
+;	BL PortB_Output
+;	B MainLoop					 ;Se o teste viu que nenhuma chave está pressionada, volta para o laço principal
+;Verifica_SW1	
+;	CMP R0, #2_00000000			 ;Verifica se somente a chave SW1 está pressionada
 
+	MOV R1, #2					; contador proximo numero
+	
+	LDRB R10, [R11, R1]
+	AND R0, R10, #2_11110000	; Atualiza DSDP:DSE (PA7:PA4)
+	BL PortA_Output
+	AND R0, R10, #2_00001111	; Atualiza DSD:DSA (PQ3:PQ0)
+	BL PortQ_Output
+	MOV R0, #2_00110000			 ; Ativa o transistor do DS1 (PB4 e PB5)
+	BL PortB_Output
+	
+	
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
 ; -------------------------------------------------------------------------------------------------------------------------	
