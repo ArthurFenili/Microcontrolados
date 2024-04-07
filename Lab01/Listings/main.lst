@@ -9,153 +9,232 @@ ARM Macro Assembler    Page 1
     3 00000000         ; Prof. Guilherme Peron
     4 00000000         ; Ver 1 19/03/2018
     5 00000000         ; Ver 2 26/08/2018
-    6 00000000         ; Este programa deve esperar o usu·rio pressionar uma ch
-                       ave.
-    7 00000000         ; Caso o usu·rio pressione uma chave, um LED deve piscar
-                        a cada 1 segundo.
+    6 00000000         ; Este programa deve esperar o usu√°rio pressionar uma c
+                       have.
+    7 00000000         ; Caso o usu√°rio pressione uma chave, um LED deve pisca
+                       r a cada 1 segundo.
     8 00000000         
     9 00000000         ; ------------------------------------------------------
                        -------------------------
-   10 00000000                 THUMB                        ; InstruÁıes do tip
-                                                            o Thumb-2
+   10 00000000                 THUMB                        ; Instru√ß√µes do t
+                                                            ipo Thumb-2
    11 00000000         ; ------------------------------------------------------
                        -------------------------
    12 00000000         
-   13 00000000         ; DeclaraÁıes EQU - Defines
+   13 00000000         ; Declara√ß√µes EQU - Defines
    14 00000000         ;<NOME>         EQU <VALOR>
    15 00000000         ; ========================
-   16 00000000         ; DefiniÁıes de Valores
+   16 00000000         ; Defini√ß√µes de Valores
    17 00000000         
    18 00000000         
    19 00000000         ; ------------------------------------------------------
                        -------------------------
-   20 00000000         ; ¡rea de Dados - DeclaraÁıes de vari·veis
+   20 00000000         ; √Årea de Dados - Declara√ß√µes de vari√°veis
    21 00000000                 AREA             DATA, ALIGN=2
-   22 00000000         ; Se alguma vari·vel for chamada em outro arquivo
+   22 00000000         ; Se alguma vari√°vel for chamada em outro arquivo
    23 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
-                       ri·vel <var> a 
+                       ri√°vel <var> a 
    24 00000000         ; partir de outro arquivo
    25 00000000         ;<var> SPACE <tam>                        ; Declara uma 
-                       vari·vel de nome <var>
+                       vari√°vel de nome <var>
    26 00000000         ; de <tam> bytes a partir da primeira 
-   27 00000000         ; posiÁ„o da RAM  
+   27 00000000         ; posi√ß√£o da RAM  
    28 00000000         
    29 00000000         ; ------------------------------------------------------
                        -------------------------
-   30 00000000         ; ¡rea de CÛdigo - Tudo abaixo da diretiva a seguir ser·
-                        armazenado na memÛria de 
-   31 00000000         ;                  cÛdigo
+   30 00000000         ; √Årea de C√≥digo - Tudo abaixo da diretiva a seguir se
+                       r√° armazenado na mem√≥ria de 
+   31 00000000         ;                  c√≥digo
    32 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 2
    33 00000000         
-   34 00000000         ; Se alguma funÁ„o do arquivo for chamada em outro arqui
-                       vo 
+   34 00000000         ; Se alguma fun√ß√£o do arquivo for chamada em outro arq
+                       uivo 
    35 00000000                 EXPORT           Start       ; Permite chamar a 
-                                                            funÁ„o Start a part
-                                                            ir de 
+                                                            fun√ß√£o Start a pa
+                                                            rtir de 
    36 00000000         ; outro arquivo. No caso startup.s
-   37 00000000         
-   38 00000000         ; Se chamar alguma funÁ„o externa 
-   39 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+   37 00000000                 EXPORT           Pisca_Transistor_PP5
+   38 00000000         
+   39 00000000         
+   40 00000000         
+   41 00000000         ; Se chamar alguma fun√ß√£o externa 
+   42 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
                        e arquivo uma 
-   40 00000000         ; funÁ„o <func>
-   41 00000000                 IMPORT           PLL_Init
-   42 00000000                 IMPORT           SysTick_Init
-   43 00000000                 IMPORT           SysTick_Wait1ms
-   44 00000000                 IMPORT           GPIO_Init
+   43 00000000         ; fun√ß√£o <func>
+   44 00000000                 IMPORT           PLL_Init
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   45 00000000                 IMPORT           PortQ_Output
-   46 00000000                 IMPORT           PortB_Output
-   47 00000000                 IMPORT           PortA_Output
-   48 00000000                 IMPORT           PortJ_Input
-   49 00000000         
-   50 00000000         ; Mapeamento dos 7 segmentos (0 a F)
-   51 00000000 3F 06 5B 
+   45 00000000                 IMPORT           SysTick_Init
+   46 00000000                 IMPORT           SysTick_Wait1ms
+   47 00000000                 IMPORT           GPIO_Init
+   48 00000000                 IMPORT           PortQ_Output
+   49 00000000                 IMPORT           PortB_Output
+   50 00000000                 IMPORT           PortA_Output
+   51 00000000                 IMPORT           PortJ_Input
+   52 00000000                 IMPORT           PortP_Output
+   53 00000000                 IMPORT           LED_Output
+   54 00000000                 IMPORT           Display_Output
+   55 00000000         
+   56 00000000         ; Mapeamento dos 7 segmentos (0 a F)
+   57 00000000 3F 06 5B 
               4F 66 6D 
               7D 07 7F 
               6F       MAPEAMENTO_7SEG
                                DCB              0x3F, 0x06, 0x5B, 0x4F, 0x66, 0
 x6D, 0x7D, 0x07, 0x7F, 0x6F
-   52 0000000A         ; ------------------------------------------------------
+   58 0000000A         ; ------------------------------------------------------
                        -------------------------
-   53 0000000A         ; FunÁ„o main()
-   54 0000000A         Start
-   55 0000000A F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+   59 0000000A         ; Fun√ß√£o main()
+   60 0000000A         Start
+   61 0000000A F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
                                                             para alterar o cloc
                                                             k do microcontrolad
                                                             or para 80MHz
-   56 0000000E F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+   62 0000000E F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
                                                              para inicializar o
                                                              SysTick
-   57 00000012 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+   63 00000012 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
                                                             que inicializa os G
                                                             PIO
-   58 00000016         
-   59 00000016 F8DF B024       LDR              R11, =MAPEAMENTO_7SEG ; Desloca
+   64 00000016         
+   65 00000016 F8DF B044       LDR              R11, =MAPEAMENTO_7SEG ; Desloca
                                                              escolhendo o respe
-                                                            ctivo n˙mero das un
-                                                            idades
-   60 0000001A         
-   61 0000001A         MainLoop
-   62 0000001A         ;Verifica_Nenhuma
-   63 0000001A         ; CMP R0, #2_00000001    ;Verifica se nenhuma chave est·
-                        pressionada
-   64 0000001A         ; BNE Verifica_SW1    ;Se o teste viu que tem pelo menos
+                                                            ctivo n√∫mero das u
+                                                            nidades
+   66 0000001A F04F 0900       MOV              R9, #0      ; Contador para os 
+                                                            leds
+   67 0000001E         
+   68 0000001E         
+   69 0000001E         MainLoop
+   70 0000001E         ;Verifica_Nenhuma
+   71 0000001E         ; CMP R0, #2_00000001    ;Verifica se nenhuma chave est√
+                       ° pressionada
+   72 0000001E         ; BNE Verifica_SW1    ;Se o teste viu que tem pelo menos
                         alguma chave pressionada pula
-   65 0000001A         ; MOV R0, #0                   ;N„o acender nenhum LED
-   66 0000001A         ; BL PortQ_Output
-   67 0000001A         ; BL PortB_Output
-   68 0000001A         ; B MainLoop      ;Se o teste viu que nenhuma chave est·
-                        pressionada, volta para o laÁo principal
-   69 0000001A         ;Verifica_SW1 
-   70 0000001A         ; CMP R0, #2_00000000    ;Verifica se somente a chave SW
-                       1 est· pressionada
-   71 0000001A         
-   72 0000001A F04F 0102       MOV              R1, #2      ; contador proximo 
-                                                            numero
-   73 0000001E         
-   74 0000001E F81B A001       LDRB             R10, [R11, R1]
-   75 00000022 F00A 00F0       AND              R0, R10, #2_11110000 ; Atualiza
-                                                             DSDP:DSE (PA7:PA4)
-                                                            
-   76 00000026 F7FF FFFE       BL               PortA_Output
-   77 0000002A F00A 000F       AND              R0, R10, #2_00001111 ; Atualiza
-                                                             DSD:DSA (PQ3:PQ0)
-   78 0000002E F7FF FFFE       BL               PortQ_Output
-   79 00000032 F04F 0030       MOV              R0, #2_00110000 ; Ativa o trans
+   73 0000001E         ; MOV R0, #0                   ;N√£o acender nenhum LED
+   74 0000001E         ; BL PortQ_Output
+   75 0000001E         ; BL PortB_Output
+   76 0000001E         ; B MainLoop      ;Se o teste viu que nenhuma chave est√
+                       ° pressionada, volta para o la√ßo principal
+   77 0000001E         ;Verifica_SW1 
+   78 0000001E         ; CMP R0, #2_00000000    ;Verifica se somente a chave SW
+                       1 est√° pressionada
+   79 0000001E         
+   80 0000001E         ;contador a partir daqui
+   81 0000001E         ; MOV R1, #2     ; contador proximo numero
+   82 0000001E         ; 
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-                                                            istor do DS1 (PB4 e
-                                                             PB5)
-   80 00000036 F7FF FFFE       BL               PortB_Output
-   81 0000003A         
-   82 0000003A         
-   83 0000003A         ; ------------------------------------------------------
+   83 0000001E         ; LDRB R10, [R11, R1]
+   84 0000001E         ; AND R0, R10, #2_11110000 ; Atualiza DSDP:DSE (PA7:PA4)
+                       
+   85 0000001E         ; BL PortA_Output
+   86 0000001E         ; AND R0, R10, #2_00001111 ; Atualiza DSD:DSA (PQ3:PQ0)
+   87 0000001E         ; BL PortQ_Output
+   88 0000001E         ; MOV R0, #2_00110000    ; Ativa o transistor do DS1 (PB
+                       4 e PB5)
+   89 0000001E         ; BL PortB_Output
+   90 0000001E         
+   91 0000001E         ;;logica do contador
+   92 0000001E         
+   93 0000001E         
+   94 0000001E         ; MOV R0, #0; -- contador;
+   95 0000001E         ; MOV R1, #1; -- passo;
+   96 0000001E         ; MOV R2, #0; -- sentido (1 crescente 0 decrescente) ;
+   97 0000001E         ; 
+   98 0000001E         ;;quando a chave 2 for apertada, troca o valor de R2 pra
+                        0 se tiver 1 e 1 se tiver zero e dai d√° B pra essa fun
+                       √ß√£o
+   99 0000001E         ;verificaChave2
+  100 0000001E         ; 
+  101 0000001E         ; CMP R2, #1;
+  102 0000001E         ; BEQ contadorCrescente;
+  103 0000001E         ; BNE contadorDecrescente;
+  104 0000001E         
+  105 0000001E         ;;quando a chave 1 for apertada, d√° B pra essa fun√ß√£o
+                        direto, ela ja faz a compara√ß√£o
+  106 0000001E         ;verificaChave1
+  107 0000001E         
+  108 0000001E         ; CMP R1, #9;
+  109 0000001E         ; IT LT
+  110 0000001E         ;  ADDLT R1,#1;
+  111 0000001E         ;  MOVHS R1,#0;
+  112 0000001E         ; B verificaChave1
+  113 0000001E         
+  114 0000001E         ;;chamado na fun√ß√£o da chave2
+  115 0000001E         ;contadorCrescente
+  116 0000001E         ; BL Display_Output
+  117 0000001E         ; CMP R7, #99;
+  118 0000001E         ; IT LT
+  119 0000001E         ;  ADDLT R7, R6;
+  120 0000001E         ;  BLT contadorCrescente;
+  121 0000001E         ; 
+  122 0000001E         ;;chamado na fun√ß√£o da chave2 
+  123 0000001E         ;contadorDecrescente
+  124 0000001E         
+  125 0000001E         ; CMP R0, #0;
+  126 0000001E         ; IT HI
+  127 0000001E         ;  SUBHI R0, R1;
+  128 0000001E         ;  MOVLS R0, #99;
+  129 0000001E         ;  
+  130 0000001E         ; B contadorDecrescente;
+  131 0000001E         
+  132 0000001E         ; Pisca LED de fora pra dentro
+  133 0000001E F04F 0801       MOV              R8, #1
+  134 00000022 F7FF FFFE       BL               LED_Output
+  135 00000026 44C1            ADD              R9, R9, R8
+  136 00000028 F1B9 0F03       CMP              R9, #3
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  137 0000002C BF88            IT               HI
+  138 0000002E F04F 0900       MOVHI            R9, #0
+  139 00000032 E7F4            B                MainLoop
+  140 00000034         
+  141 00000034         Pisca_Transistor_PP5
+  142 00000034 F04F 0020       MOV              R0, #2_00100000
+  143 00000038 B500            PUSH             {LR}
+  144 0000003A F7FF FFFE       BL               PortP_Output
+  145 0000003E F44F 707A       MOV              R0, #1000
+  146 00000042 F7FF FFFE       BL               SysTick_Wait1ms
+  147 00000046 F04F 0000       MOV              R0, #2_00000000
+  148 0000004A F7FF FFFE       BL               PortP_Output
+  149 0000004E F44F 707A       MOV              R0, #1000
+  150 00000052 F7FF FFFE       BL               SysTick_Wait1ms
+  151 00000056 F85D EB04       POP              {LR}
+  152 0000005A 4770            BX               LR
+  153 0000005C         
+  154 0000005C         
+  155 0000005C         
+  156 0000005C         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-   84 0000003A         ; Fim do Arquivo
-   85 0000003A         ; ------------------------------------------------------
+  157 0000005C         ; Fim do Arquivo
+  158 0000005C         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-   86 0000003A 00 00           ALIGN                        ;Garante que o fim 
-                                                            da seÁ„o est· alinh
-                                                            ada 
-   87 0000003C                 END                          ;Fim do arquivo
+  159 0000005C                 ALIGN                        ;Garante que o fim 
+                                                            da se√ß√£o est√° al
+                                                            inhada 
+  160 0000005C                 END                          ;Fim do arquivo
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\suzib\AppData
-\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
- SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SE
-TA 1" --list=.\listings\main.lst main.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\main.d -o.\objects\main.o -IC:\Users\Arthur\AppData\Local\Ar
+m\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" 
+--predefine="__UVISION_VERSION SETA 539" --predefine="TM4C1294NCPDT SETA 1" --l
+ist=.\listings\main.lst main.s
 
 
 
@@ -189,92 +268,100 @@ MAPEAMENTO_7SEG 00000000
 
 Symbol: MAPEAMENTO_7SEG
    Definitions
-      At line 51 in file main.s
+      At line 57 in file main.s
    Uses
-      At line 59 in file main.s
+      At line 65 in file main.s
 Comment: MAPEAMENTO_7SEG used once
-MainLoop 0000001A
+MainLoop 0000001E
 
 Symbol: MainLoop
    Definitions
-      At line 61 in file main.s
+      At line 69 in file main.s
    Uses
-      None
-Comment: MainLoop unused
+      At line 139 in file main.s
+Comment: MainLoop used once
+Pisca_Transistor_PP5 00000034
+
+Symbol: Pisca_Transistor_PP5
+   Definitions
+      At line 141 in file main.s
+   Uses
+      At line 37 in file main.s
+Comment: Pisca_Transistor_PP5 used once
 Start 0000000A
 
 Symbol: Start
    Definitions
-      At line 54 in file main.s
+      At line 60 in file main.s
    Uses
       At line 35 in file main.s
 Comment: Start used once
-4 symbols
+5 symbols
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
+Display_Output 00000000
+
+Symbol: Display_Output
+   Definitions
+      At line 54 in file main.s
+   Uses
+      None
+Comment: Display_Output unused
 GPIO_Init 00000000
 
 Symbol: GPIO_Init
    Definitions
-      At line 44 in file main.s
+      At line 47 in file main.s
    Uses
-      At line 57 in file main.s
+      At line 63 in file main.s
 Comment: GPIO_Init used once
+LED_Output 00000000
+
+Symbol: LED_Output
+   Definitions
+      At line 53 in file main.s
+   Uses
+      At line 134 in file main.s
+Comment: LED_Output used once
 PLL_Init 00000000
 
 Symbol: PLL_Init
    Definitions
-      At line 41 in file main.s
+      At line 44 in file main.s
    Uses
-      At line 55 in file main.s
+      At line 61 in file main.s
 Comment: PLL_Init used once
 PortA_Output 00000000
 
 Symbol: PortA_Output
    Definitions
-      At line 47 in file main.s
+      At line 50 in file main.s
    Uses
-      At line 76 in file main.s
-Comment: PortA_Output used once
+      None
+Comment: PortA_Output unused
 PortB_Output 00000000
 
 Symbol: PortB_Output
    Definitions
-      At line 46 in file main.s
+      At line 49 in file main.s
    Uses
-      At line 80 in file main.s
-Comment: PortB_Output used once
+      None
+Comment: PortB_Output unused
 PortJ_Input 00000000
 
 Symbol: PortJ_Input
    Definitions
-      At line 48 in file main.s
+      At line 51 in file main.s
    Uses
       None
 Comment: PortJ_Input unused
-PortQ_Output 00000000
+PortP_Output 00000000
 
-Symbol: PortQ_Output
-   Definitions
-      At line 45 in file main.s
-   Uses
-      At line 78 in file main.s
-Comment: PortQ_Output used once
-SysTick_Init 00000000
-
-Symbol: SysTick_Init
-   Definitions
-      At line 42 in file main.s
-   Uses
-      At line 56 in file main.s
-Comment: SysTick_Init used once
-SysTick_Wait1ms 00000000
-
-Symbol: SysTick_Wait1ms
+Symbol: PortP_Output
 
 
 
@@ -282,9 +369,35 @@ ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 External symbols
 
    Definitions
-      At line 43 in file main.s
+      At line 52 in file main.s
+   Uses
+      At line 144 in file main.s
+      At line 148 in file main.s
+
+PortQ_Output 00000000
+
+Symbol: PortQ_Output
+   Definitions
+      At line 48 in file main.s
    Uses
       None
-Comment: SysTick_Wait1ms unused
-8 symbols
-349 symbols in table
+Comment: PortQ_Output unused
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 45 in file main.s
+   Uses
+      At line 62 in file main.s
+Comment: SysTick_Init used once
+SysTick_Wait1ms 00000000
+
+Symbol: SysTick_Wait1ms
+   Definitions
+      At line 46 in file main.s
+   Uses
+      At line 146 in file main.s
+      At line 150 in file main.s
+
+11 symbols
+353 symbols in table
