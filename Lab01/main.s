@@ -3,41 +3,41 @@
 ; Prof. Guilherme Peron
 ; Ver 1 19/03/2018
 ; Ver 2 26/08/2018
-; Este programa deve esperar o usu·rio pressionar uma chave.
-; Caso o usu·rio pressione uma chave, um LED deve piscar a cada 1 segundo.
+; Este programa deve esperar o usu√°rio pressionar uma chave.
+; Caso o usu√°rio pressione uma chave, um LED deve piscar a cada 1 segundo.
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; InstruÁıes do tipo Thumb-2
+        THUMB                        ; Instru√ß√µes do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 		
-; DeclaraÁıes EQU - Defines
+; Declara√ß√µes EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
-; DefiniÁıes de Valores
+; Defini√ß√µes de Valores
 
 
 ; -------------------------------------------------------------------------------
-; ¡rea de Dados - DeclaraÁıes de vari·veis
+; √Årea de Dados - Declara√ß√µes de vari√°veis
 		AREA  DATA, ALIGN=2
-		; Se alguma vari·vel for chamada em outro arquivo
-		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a vari·vel <var> a 
+		; Se alguma vari√°vel for chamada em outro arquivo
+		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a vari√°vel <var> a 
 		                                   ; partir de outro arquivo
-;<var>	SPACE <tam>                        ; Declara uma vari·vel de nome <var>
+;<var>	SPACE <tam>                        ; Declara uma vari√°vel de nome <var>
                                            ; de <tam> bytes a partir da primeira 
-                                           ; posiÁ„o da RAM		
+                                           ; posi√ß√£o da RAM		
 
 ; -------------------------------------------------------------------------------
-; ¡rea de CÛdigo - Tudo abaixo da diretiva a seguir ser· armazenado na memÛria de 
-;                  cÛdigo
+; √Årea de C√≥digo - Tudo abaixo da diretiva a seguir ser√° armazenado na mem√≥ria de 
+;                  c√≥digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma funÁ„o do arquivo for chamada em outro arquivo	
-        EXPORT Start                ; Permite chamar a funÁ„o Start a partir de 
+		; Se alguma fun√ß√£o do arquivo for chamada em outro arquivo	
+        EXPORT Start                ; Permite chamar a fun√ß√£o Start a partir de 
 			                        ; outro arquivo. No caso startup.s
 									
-		; Se chamar alguma funÁ„o externa	
+		; Se chamar alguma fun√ß√£o externa	
         ;IMPORT <func>              ; Permite chamar dentro deste arquivo uma 
-									; funÁ„o <func>
+									; fun√ß√£o <func>
 		IMPORT  PLL_Init
 		IMPORT  SysTick_Init
 		IMPORT  SysTick_Wait1ms			
@@ -50,24 +50,24 @@
 ; Mapeamento dos 7 segmentos (0 a F)
 MAPEAMENTO_7SEG DCB	0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F
 ; -------------------------------------------------------------------------------
-; FunÁ„o main()
+; Fun√ß√£o main()
 Start  		
 	BL PLL_Init                  ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init              ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
 	
-	LDR R11, =MAPEAMENTO_7SEG	 ; Desloca escolhendo o respectivo n˙mero das unidades
+	LDR R11, =MAPEAMENTO_7SEG	 ; Desloca escolhendo o respectivo n√∫mero das unidades
 
 MainLoop
 ;Verifica_Nenhuma
-;	CMP	R0, #2_00000001			 ;Verifica se nenhuma chave est· pressionada
+;	CMP	R0, #2_00000001			 ;Verifica se nenhuma chave est√° pressionada
 ;	BNE Verifica_SW1			 ;Se o teste viu que tem pelo menos alguma chave pressionada pula
-;	MOV R0, #0                   ;N„o acender nenhum LED
+;	MOV R0, #0                   ;N√£o acender nenhum LED
 ;	BL PortQ_Output
 ;	BL PortB_Output
-;	B MainLoop					 ;Se o teste viu que nenhuma chave est· pressionada, volta para o laÁo principal
+;	B MainLoop					 ;Se o teste viu que nenhuma chave est√° pressionada, volta para o la√ßo principal
 ;Verifica_SW1	
-;	CMP R0, #2_00000000			 ;Verifica se somente a chave SW1 est· pressionada
+;	CMP R0, #2_00000000			 ;Verifica se somente a chave SW1 est√° pressionada
 
 	MOV R1, #2					; contador proximo numero
 	
@@ -78,10 +78,58 @@ MainLoop
 	BL PortQ_Output
 	MOV R0, #2_00110000			 ; Ativa o transistor do DS1 (PB4 e PB5)
 	BL PortB_Output
+
+;logica do contador
+
+
+	MOV R0, #0; -- contador;
+	MOV R1, #3; -- passo;
+	MOV R2, #0; -- sentido (1 crescente 0 decrescente) ;
+	
+;quando a chave 2 for apertada, troca o valor de R2 pra 0 se tiver 1 e 1 se tiver zero e dai d√° B pra essa fun√ß√£o
+verificaChave2
+	
+	CMP R2, #1;
+	BEQ contadorCrescente;
+	BNE contadorDecrescente;
+
+;quando a chave 1 for apertada, d√° B pra essa fun√ß√£o direto, ela ja faz a compara√ß√£o
+verificaChave1
+
+	CMP R1, #9;
+	IT LT
+		ADDLT R1,#1;
+		MOVHS R1,#0;
+	B verificaChave1
+
+;chamado na fun√ß√£o da chave2
+contadorCrescente
+
+	CMP R0, #99;
+	IT LT
+		ADDLT R0, R1;
+		MOVHS R0, #0;
+		
+	B contadorCrescente;
+	
+;chamado na fun√ß√£o da chave2	
+contadorDecrescente
+
+	CMP R0, #0;
+	IT HI
+		SUBHI R0, R1;
+		MOVLS R0, #99;
+		
+	B contadorDecrescente;
+		
+		
+	NOP;
+
+
 	
 	
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
 ; -------------------------------------------------------------------------------------------------------------------------	
-    ALIGN                        ;Garante que o fim da seÁ„o est· alinhada 
+    ALIGN                        ;Garante que o fim da se√ß√£o est√° alinhada 
     END                          ;Fim do arquivo
