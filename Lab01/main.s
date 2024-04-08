@@ -35,7 +35,8 @@
         EXPORT Start                ; Permite chamar a função Start a partir de 
 			                        ; outro arquivo. No caso startup.s
 		EXPORT Pisca_Transistor_PP5
-
+		EXPORT Pisca_Transistor_PB4
+		EXPORT Pisca_Transistor_PB5
 
 									
 		; Se chamar alguma função externa	
@@ -64,70 +65,21 @@ Start
 	
 	LDR R11, =MAPEAMENTO_7SEG	 ; Desloca escolhendo o respectivo número das unidades
 	MOV R9, #0					 ; Contador para os leds
-
+	
+	MOV R7, #0; -- contador;
+	MOV R6, #1; -- passo;
+	MOV R5, #1; -- sentido (1 crescente 0 decrescente) ;
 
 MainLoop
-;Verifica_Nenhuma
-;	CMP	R0, #2_00000001			 ;Verifica se nenhuma chave está pressionada
-;	BNE Verifica_SW1			 ;Se o teste viu que tem pelo menos alguma chave pressionada pula
-;	MOV R0, #0                   ;Não acender nenhum LED
-;	BL PortQ_Output
-;	BL PortB_Output
-;	B MainLoop					 ;Se o teste viu que nenhuma chave está pressionada, volta para o laço principal
-;Verifica_SW1	
-;	CMP R0, #2_00000000			 ;Verifica se somente a chave SW1 está pressionada
+	
+	
+contadorCrescente
+	BL Display_Output
+	CMP R7, #99;
+	IT LT
+		ADDLT R7, R6;
+		BLT contadorCrescente;
 
-;contador a partir daqui
-;	MOV R1, #2					; contador proximo numero
-;	
-;	LDRB R10, [R11, R1]
-;	AND R0, R10, #2_11110000	; Atualiza DSDP:DSE (PA7:PA4)
-;	BL PortA_Output
-;	AND R0, R10, #2_00001111	; Atualiza DSD:DSA (PQ3:PQ0)
-;	BL PortQ_Output
-;	MOV R0, #2_00110000			 ; Ativa o transistor do DS1 (PB4 e PB5)
-;	BL PortB_Output
-
-;;logica do contador
-
-
-;	MOV R0, #0; -- contador;
-;	MOV R1, #1; -- passo;
-;	MOV R2, #0; -- sentido (1 crescente 0 decrescente) ;
-;	
-;;quando a chave 2 for apertada, troca o valor de R2 pra 0 se tiver 1 e 1 se tiver zero e dai dá B pra essa função
-;verificaChave2
-;	
-;	CMP R2, #1;
-;	BEQ contadorCrescente;
-;	BNE contadorDecrescente;
-
-;;quando a chave 1 for apertada, dá B pra essa função direto, ela ja faz a comparação
-;verificaChave1
-
-;	CMP R1, #9;
-;	IT LT
-;		ADDLT R1,#1;
-;		MOVHS R1,#0;
-;	B verificaChave1
-
-;;chamado na função da chave2
-;contadorCrescente
-;	BL Display_Output
-;	CMP R7, #99;
-;	IT LT
-;		ADDLT R7, R6;
-;		BLT contadorCrescente;
-;	
-;;chamado na função da chave2	
-;contadorDecrescente
-
-;	CMP R0, #0;
-;	IT HI
-;		SUBHI R0, R1;
-;		MOVLS R0, #99;
-;		
-;	B contadorDecrescente;
 
 ; Pisca LED de fora pra dentro
 	MOV R8, #1
@@ -151,7 +103,31 @@ Pisca_Transistor_PP5
 	POP {LR}
 	BX LR
 
-	
+Pisca_Transistor_PB4
+	MOV R0, #2_00010000
+	PUSH {LR}
+	BL PortB_Output
+	MOV R0, #1
+	BL SysTick_Wait1ms
+	MOV R0, #2_00000000
+	BL PortB_Output
+	MOV R0, #1
+	BL SysTick_Wait1ms
+	POP {LR}
+	BX LR
+
+Pisca_Transistor_PB5
+	MOV R0, #2_00100000
+	PUSH {LR}
+	BL PortB_Output
+	MOV R0, #1
+	BL SysTick_Wait1ms
+	MOV R0, #2_00000000
+	BL PortB_Output
+	MOV R0, #1
+	BL SysTick_Wait1ms
+	POP {LR}
+	BX LR
 	
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo

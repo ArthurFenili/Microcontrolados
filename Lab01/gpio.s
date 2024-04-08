@@ -96,6 +96,9 @@ GPIO_PORTP					EQU	   2_010000000000000
 			
 			
 		IMPORT Pisca_Transistor_PP5
+		IMPORT Pisca_Transistor_PB4
+		IMPORT Pisca_Transistor_PB5
+
 		
 ; Mapeamento dos 7 segmentos (0 a F)
 MAPEAMENTO_7SEG DCB	0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F								
@@ -324,8 +327,72 @@ LED_Output
 	BX LR		
 	
 Display_Output
+	PUSH {LR}
+	
+	MOV R10, #10
+	UDIV R11, R7, R10        ;divide o valor total por 10, resultando no algarismo da dezena no R11
+	MLS R12, R11, R10, R7    ;multiplica o algarismo da dezena por 10, e diminui isso do valor total, resultando no algarismo da unidade no R12
+    LDR R0, =MAPEAMENTO_7SEG
 
-
+; -------------- display das dezenas ---------------
+	; faz a função do PortA_Output
+	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register	 
+	LDRB R3, [R0, R11]
+	AND R4, R3, #2_11110000
+	LDR R2, [R1]
+	BIC R2, #2_11110000
+	ORR R3, R3, R2
+	STR R3, [R1]
+	
+	; faz a função do PortQ_Output
+	LDR R1, =GPIO_PORTQ_DATA_R
+	LDRB R3, [R0, R11]
+	AND R4, R3, #2_00001111
+	LDR R2, [R1]
+	BIC R2, #2_00001111
+	ORR R3, R3, R2
+	STR R3, [R1]
+	
+	MOV R3, #0
+LoopPisca
+	BL Pisca_Transistor_PB4
+	CMP R3, #100
+	ITT NE
+		ADDNE R3, R3, #1
+		BNE LoopPisca
+	POP {LR}
+	
+; -------------- display das unidades ---------------
+	PUSH {LR}
+	; faz a função do PortA_Output
+	LDR R0, =MAPEAMENTO_7SEG
+	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register	 
+	LDRB R3, [R0, R12]
+	AND R4, R3, #2_11110000
+	LDR R2, [R1]
+	BIC R2, #2_11110000
+	ORR R3, R3, R2
+	STR R3, [R1]
+	
+	; faz a função do PortQ_Output
+	LDR R1, =GPIO_PORTQ_DATA_R
+	LDRB R3, [R0, R12]
+	AND R4, R3, #2_00001111
+	LDR R2, [R1]
+	BIC R2, #2_00001111
+	ORR R3, R3, R2
+	STR R3, [R1]
+	
+	MOV R3, #0
+LoopPisca2
+	BL Pisca_Transistor_PB5
+	CMP R3, #100
+	ITT NE
+		ADDNE R3, R3, #1
+		BNE LoopPisca2
+	POP {LR}
+	
+	BX LR
 
     ALIGN                           ; garante que o fim da seção está alinhada 
     END                             ; fim do arquivo
