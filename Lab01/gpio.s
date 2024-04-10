@@ -297,31 +297,31 @@ LED_Output
 	LDR	R2, =GPIO_PORTQ_DATA_R		    	;Carrega o valor do offset do data register
                         
 	LDR R3, [R1]
-	LDR R4, [R2]
+	LDR R0, [R2]
 
 
-	CMP R9, #0
+	CMP R4, #0
 	ITT EQ
 		MOVEQ R3, #2_10000000
-		MOVEQ R4, #2_00000001
+		MOVEQ R0, #2_00000001
 		
-	CMP R9, #1
+	CMP R4, #1
 	ITT EQ
 		MOVEQ R3, #2_01000000
-		MOVEQ R4, #2_00000010
+		MOVEQ R0, #2_00000010
 		
-	CMP R9, #2
+	CMP R4, #2
 	ITT EQ
 		MOVEQ R3, #2_00100000
-		MOVEQ R4, #2_00000100
+		MOVEQ R0, #2_00000100
 		
-	CMP R9, #3
+	CMP R4, #3
 	ITT EQ
 		MOVEQ R3, #2_00010000
-		MOVEQ R4, #2_00001000
+		MOVEQ R0, #2_00001000
 	
 	STR R3, [R1]
-	STR R4, [R2]
+	STR R0, [R2]
 	
 	BL Pisca_Transistor_PP5
 	POP {LR}
@@ -339,7 +339,6 @@ Display_Output
 	; faz a função do PortA_Output
 	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register	 
 	LDRB R3, [R0, R11]
-	AND R4, R3, #2_11110000
 	LDR R2, [R1]
 	BIC R2, #2_11110000
 	ORR R3, R3, R2
@@ -348,7 +347,6 @@ Display_Output
 	; faz a função do PortQ_Output
 	LDR R1, =GPIO_PORTQ_DATA_R
 	LDRB R3, [R0, R11]
-	AND R4, R3, #2_00001111
 	LDR R2, [R1]
 	BIC R2, #2_00001111
 	ORR R3, R3, R2
@@ -362,7 +360,6 @@ Display_Output
 	LDR R0, =MAPEAMENTO_7SEG
 	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register	 
 	LDRB R3, [R0, R12]
-	AND R4, R3, #2_11110000
 	LDR R2, [R1]
 	BIC R2, #2_11110000
 	ORR R3, R3, R2
@@ -371,7 +368,6 @@ Display_Output
 	; faz a função do PortQ_Output
 	LDR R1, =GPIO_PORTQ_DATA_R
 	LDRB R3, [R0, R12]
-	AND R4, R3, #2_00001111
 	LDR R2, [R1]
 	BIC R2, #2_00001111
 	ORR R3, R3, R2

@@ -64,6 +64,7 @@ Start
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
 	
 	MOV R9, #0					 ; Contador para os leds
+	MOV R4, #0
 
 	MOV R7, #0; -- contador;
 	MOV R6, #1; -- passo;
@@ -71,6 +72,10 @@ Start
 
 MainLoop
 	BL Display_Output
+	BL LED_Output
+	CMP R9, #100
+	IT EQ
+		BLEQ chamaLED
 	CMP R9, #100
 	ITT EQ
 		MOVEQ R9, #0
@@ -124,14 +129,14 @@ contadorDecrescente
 	BL InputLoop
 
 
+chamaLED
 ; Pisca LED de fora pra dentro
 	MOV R8, #1
-	BL LED_Output
-	ADD R9, R9, R8
-	CMP R9, #3
+	ADD R4, R4, R8
+	CMP R4, #3
 	IT HI
-		MOVHI R9, #0
-	B MainLoop
+		MOVHI R4, #0
+	BX LR
 
 Pisca_Transistor_PP5
 	MOV R0, #2_00100000
