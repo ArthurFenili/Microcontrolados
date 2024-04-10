@@ -86,9 +86,7 @@ GPIO_PORTP					EQU	   2_010000000000000
 
 		; Se alguma função do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-		EXPORT PortQ_Output			; Permite chamar PortQ_Output de outro arquivo
 		EXPORT PortB_Output			; Permite chamar PortB_Output de outro arquivo
-		EXPORT PortA_Output          ; Permite chamar PortJ_Input de outro arquivo
 		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
 		EXPORT PortP_Output
 		EXPORT LED_Output
@@ -98,6 +96,7 @@ GPIO_PORTP					EQU	   2_010000000000000
 		IMPORT Pisca_Transistor_PP5
 		IMPORT Pisca_Transistor_PB4
 		IMPORT Pisca_Transistor_PB5
+		IMPORT SysTick_Wait1ms
 
 		
 ; Mapeamento dos 7 segmentos (0 a F)
@@ -230,25 +229,8 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
 			BX LR
 
 ; -------------------------------------------------------------------------------
-; Função PortN_Output
-; Parâmetro de entrada: 
-; Parâmetro de saída: Não tem
-PortQ_Output
-; ****************************************
-; Escrever função que acende ou apaga o LED
-; ****************************************
-	LDR	R1, =GPIO_PORTQ_DATA_R		    	;Carrega o valor do offset do data register
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	BIC R2, #2_00001111                     ;Limpar bits lidos da porta 11110000
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta Q o barramento de dados dos pinos N1
-	BX LR									;Retorno
-	
+
 PortB_Output
-; ****************************************
-; Escrever função que acende ou apaga o LED
-; ****************************************
 	LDR	R1, =GPIO_PORTB_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
@@ -257,30 +239,7 @@ PortB_Output
 	STR R0, [R1]                            ;Escreve na porta B o barramento de dados dos pinos N1
 	BX LR									;Retorno
 	
-PortA_Output
-; ****************************************
-; Escrever função que acende ou apaga o LED
-; ****************************************
-	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	BIC R2, #2_11110000                     ;Limpar bits lidos da porta 00001111
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta B o barramento de dados dos pinos N1
-	BX LR									;Retorno
 ; -------------------------------------------------------------------------------
-; Função PortJ_Input
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: R0 --> o valor da leitura
-PortJ_Input
-; ****************************************
-; Escrever função que lê a chave e retorna 
-; um registrador se está ativada ou não
-; ****************************************
-	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
-	
-	BX LR									;Retorno
 
 PortP_Output
 	LDR	R1, =GPIO_PORTP_DATA_R		    ;Carrega o valor do offset do data register
@@ -289,7 +248,19 @@ PortP_Output
 	BIC R2, #2_00100000                     ;Limpar bits lidos da porta 11001111
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
 	STR R0, [R1]                            ;Escreve na porta B o barramento de dados dos pinos N1
-	BX LR	
+	BX LR
+
+; -------------------------------------------------------------------------------
+
+; Função PortJ_Input
+; Parâmetro de entrada: Não tem
+; Parâmetro de saída: R0 --> o valor da leitura
+PortJ_Input
+	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
+	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
+	BX LR									;Retorno
+
+; -------------------------------------------------------------------------------
 
 LED_Output
 	PUSH {LR}
@@ -300,61 +271,64 @@ LED_Output
 	LDR R0, [R2]
 
 
-	CMP R4, #0
+	CMP R4, #0								; verifica se é a vez da primeira dupla de leds piscar
 	ITT EQ
-		MOVEQ R3, #2_10000000
+		MOVEQ R3, #2_10000000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
 		MOVEQ R0, #2_00000001
 		
-	CMP R4, #1
+	CMP R4, #1								; verifica se é a vez da segunda dupla de leds piscar
 	ITT EQ
-		MOVEQ R3, #2_01000000
+		MOVEQ R3, #2_01000000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
 		MOVEQ R0, #2_00000010
 		
-	CMP R4, #2
+	CMP R4, #2								; verifica se é a vez da terceira dupla de leds piscar
 	ITT EQ
-		MOVEQ R3, #2_00100000
+		MOVEQ R3, #2_00100000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
 		MOVEQ R0, #2_00000100
 		
-	CMP R4, #3
-	ITT EQ
-		MOVEQ R3, #2_00010000
+	CMP R4, #3								; verifica se é a vez da quarta dupla de leds piscar
+	ITT EQ		
+		MOVEQ R3, #2_00010000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
 		MOVEQ R0, #2_00001000
 	
-	STR R3, [R1]
-	STR R0, [R2]
+	STR R3, [R1]							; carrega no DATA do portA o bit do led da esquerda que deve piscar
+	STR R0, [R2]							; carrega no DATA do portQ o bit do led da direita que deve piscar
 	
-	BL Pisca_Transistor_PP5
+	BL Pisca_Transistor_PP5					; chama a subrotina para piscar o transistor dos leds
 	POP {LR}
 	BX LR		
+
+; -------------------------------------------------------------------------------
 	
 Display_Output
 	PUSH {LR}
 	
 	MOV R10, #10
-	UDIV R11, R7, R10        ;divide o valor total por 10, resultando no algarismo da dezena no R11
-	MLS R12, R11, R10, R7    ;multiplica o algarismo da dezena por 10, e diminui isso do valor total, resultando no algarismo da unidade no R12
+	UDIV R11, R7, R10        ; divide o valor total por 10, resultando no algarismo da dezena no R11
+	MLS R12, R11, R10, R7    ; multiplica o algarismo da dezena por 10, e diminui isso do valor total, resultando no algarismo da unidade no R12
     LDR R0, =MAPEAMENTO_7SEG
 
 ; -------------- display das dezenas ---------------
 	; faz a função do PortA_Output
-	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register	 
-	LDRB R3, [R0, R11]
-	LDR R2, [R1]
-	BIC R2, #2_11110000
-	ORR R3, R3, R2
-	STR R3, [R1]
+	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ; carrega o valor do offset do data register	 
+	LDRB R3, [R0, R11]						; carrega em R3 o valor mapeado para o display das dezenas
+	LDR R2, [R1]							; carrega em R2 o valor DATA do portA
+	BIC R2, #2_11110000						; AND negado bit a bit para manter os valores anteriores e limpar somente os bits necessarios
+	ORR R3, R3, R2							; OR bit a bit para manter os valores anteriores e setar somente os bits necessarios
+	STR R3, [R1]							; carrega em R3 o valor atualizado do DATA do portA
 	
 	; faz a função do PortQ_Output
-	LDR R1, =GPIO_PORTQ_DATA_R
-	LDRB R3, [R0, R11]
-	LDR R2, [R1]
-	BIC R2, #2_00001111
-	ORR R3, R3, R2
-	STR R3, [R1]
-	BL Pisca_Transistor_PB4
+	LDR R1, =GPIO_PORTQ_DATA_R				; carrega o valor do offset do data register
+	LDRB R3, [R0, R11]						; carrega em R3 o valor mapeado para o display das dezenas
+	LDR R2, [R1]							; carrega em R2 o valor DATA do portQ
+	BIC R2, #2_00001111						; AND negado bit a bit para manter os valores anteriores e limpar somente os bits necessarios
+	ORR R3, R3, R2							; OR bit a bit para mantes os valores anteriores e setar somente os bits necessarios
+	STR R3, [R1]							; carrega em R3 o valor atualizado do DATA do portQ
+	
+	BL Pisca_Transistor_PB4					; chama a subrotina para piscar o transistor do DS1
 	POP {LR}
 	
-; -------------- display das unidades ---------------
+; -------------- display das unidades (mesma coisa do display das dezenas) ---------------
 	PUSH {LR}
 	; faz a função do PortA_Output
 	LDR R0, =MAPEAMENTO_7SEG
@@ -372,7 +346,8 @@ Display_Output
 	BIC R2, #2_00001111
 	ORR R3, R3, R2
 	STR R3, [R1]
-	BL Pisca_Transistor_PB5
+	
+	BL Pisca_Transistor_PB5					; chama a subrotina para piscar o transistor do DS2
 	POP {LR}
 	
 	BX LR
