@@ -206,7 +206,7 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
             STR     R1, [R0]							;Escreve no registrador da memória funcionalidade digital 
  
             LDR     R0, =GPIO_PORTJ_AHB_DEN_R			;Carrega o endereço do DEN
-			MOV     R1, #2_00000001                     ;Ativa os pinos PJ0  como I/O Digital      
+			MOV     R1, #2_00000011                     ;Ativa os pinos PJ0  como I/O Digital      
             STR     R1, [R0]                            ;Escreve no registrador da memória funcionalidade digital
 			
 			LDR     R0, =GPIO_PORTB_AHB_DEN_R			;Carrega o endereço do DEN
@@ -279,6 +279,7 @@ PortJ_Input
 ; ****************************************
 	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
+	
 	BX LR									;Retorno
 
 PortP_Output
@@ -352,14 +353,7 @@ Display_Output
 	BIC R2, #2_00001111
 	ORR R3, R3, R2
 	STR R3, [R1]
-	
-	MOV R3, #0
-LoopPisca
 	BL Pisca_Transistor_PB4
-	CMP R3, #100
-	ITT NE
-		ADDNE R3, R3, #1
-		BNE LoopPisca
 	POP {LR}
 	
 ; -------------- display das unidades ---------------
@@ -382,14 +376,7 @@ LoopPisca
 	BIC R2, #2_00001111
 	ORR R3, R3, R2
 	STR R3, [R1]
-	
-	MOV R3, #0
-LoopPisca2
 	BL Pisca_Transistor_PB5
-	CMP R3, #100
-	ITT NE
-		ADDNE R3, R3, #1
-		BNE LoopPisca2
 	POP {LR}
 	
 	BX LR

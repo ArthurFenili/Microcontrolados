@@ -63,22 +63,65 @@ Start
 	BL SysTick_Init              ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
 	
-	LDR R11, =MAPEAMENTO_7SEG	 ; Desloca escolhendo o respectivo número das unidades
 	MOV R9, #0					 ; Contador para os leds
-	
+
 	MOV R7, #0; -- contador;
 	MOV R6, #1; -- passo;
 	MOV R5, #1; -- sentido (1 crescente 0 decrescente) ;
 
 MainLoop
+	BL Display_Output
+	CMP R9, #100
+	ITT EQ
+		MOVEQ R9, #0
+		BEQ chamaContador
+	ADD R9, R9, #1
+	
+InputLoop
+	BL PortJ_Input				 ;Chama a subrotina que lê o estado das chaves e coloca o resultado em R0
+	CMP R0, #2_00000010
+	BEQ Verifica_SW1
+	CMP R0, #2_00000001
+	BEQ Verifica_SW2
+	
+
+	B MainLoop
+
+Verifica_SW1		
+	CMP R6, #9
+	ITE LO
+		ADDLO R6, #1
+		MOVHS R6, #1
+	
+	B MainLoop                   ;Volta para o laço principal
+Verifica_SW2	
+	CMP R5, #1
+	ITE EQ
+		MOVEQ R5, #0
+		MOVNE R5, #1
+	B MainLoop
+		
+chamaContador
+	CMP R5, #1
+	BEQ contadorCrescente
+	BNE contadorDecrescente
 	
 	
 contadorCrescente
 	BL Display_Output
 	CMP R7, #99;
-	IT LT
-		ADDLT R7, R6;
-		BLT contadorCrescente;
+	ITE LO
+		ADDLO R7, R6;
+		MOVHS R7, #0
+	BL InputLoop
+
+contadorDecrescente
+	BL Display_Output
+	CMP R7, #0
+	ITE HI
+		SUBHI R7, R6
+		MOVLS R7, #99
+	BL InputLoop
 
 
 ; Pisca LED de fora pra dentro
@@ -94,11 +137,11 @@ Pisca_Transistor_PP5
 	MOV R0, #2_00100000
 	PUSH {LR}
 	BL PortP_Output
-	MOV R0, #1000
+	MOV R0, #1
 	BL SysTick_Wait1ms
 	MOV R0, #2_00000000
 	BL PortP_Output
-	MOV R0, #1000
+	MOV R0, #1
 	BL SysTick_Wait1ms
 	POP {LR}
 	BX LR
