@@ -257,7 +257,15 @@ PortP_Output
 ; Parâmetro de saída: R0 --> o valor da leitura
 PortJ_Input
 	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
+    LDR R8, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
+	PUSH {LR}
+	MOV R0, #15
+	BL SysTick_Wait1ms
+	POP {LR}
+	LDR R12, [R1]
+	CMP R12, R8
+	IT HI
+		MOVHI R0, R8
 	BX LR									;Retorno
 
 ; -------------------------------------------------------------------------------
@@ -291,6 +299,25 @@ LED_Output
 		MOVEQ R3, #2_00010000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
 		MOVEQ R0, #2_00001000
 	
+	CMP R4, #4								; verifica se é a vez da quarta dupla de leds piscar
+	ITT EQ		
+		MOVEQ R3, #2_00010000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
+		MOVEQ R0, #2_00001000
+		
+	CMP R4, #5								; verifica se é a vez da quarta dupla de leds piscar
+	ITT EQ		
+		MOVEQ R3, #2_00100000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
+		MOVEQ R0, #2_00000100
+		
+	CMP R4, #6								; verifica se é a vez da quarta dupla de leds piscar
+	ITT EQ		
+		MOVEQ R3, #2_01000000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
+		MOVEQ R0, #2_00000010
+		
+	CMP R4, #7								; verifica se é a vez da quarta dupla de leds piscar
+	ITT EQ		
+		MOVEQ R3, #2_10000000				; se sim, carrega em R3 e R4 os bits dos leds que devem piscar
+		MOVEQ R0, #2_00000001
 	STR R3, [R1]							; carrega no DATA do portA o bit do led da esquerda que deve piscar
 	STR R0, [R2]							; carrega no DATA do portQ o bit do led da direita que deve piscar
 	

@@ -71,10 +71,10 @@ Start
 MainLoop
 	BL Display_Output			 ; chama a subrotina para acender o display
 	BL LED_Output				 ; chama s subrotina para acender os leds
-	CMP R9, #100				 ; verificação pra piscar os leds e incrementar/decrementar contador
+	CMP R9, #50				 ; verificação pra piscar os leds e incrementar/decrementar contador
 	IT EQ
 		BLEQ chamaLED			 ; se for momento de piscar led, chama a subrotina de piscar
-	CMP R9, #100
+	CMP R9, #50
 	ITT EQ
 		MOVEQ R9, #0
 		BLEQ chamaContador		 ; se for momento de modificar o contador, chama a subrotina para incrementar ou decrementar
@@ -126,7 +126,7 @@ chamaLED
 ; Pisca LED de fora pra dentro
 	MOV R8, #1
 	ADD R4, R4, R8 				 ; incrementa em 1 o estágio do led
-	CMP R4, #3					 ; verifica se o estágio do led já chegou no ultimo
+	CMP R4, #7					 ; verifica se o estágio do led já chegou no ultimo
 	IT HI
 		MOVHI R4, #0			 ; se sim, reinicia
 	BX LR
