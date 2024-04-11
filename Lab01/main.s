@@ -116,9 +116,9 @@ contadorCrescente
 
 contadorDecrescente
 	CMP R7, #0					 ; verifica se o contador chegou em 0
-	ITE HI
-		SUBHI R7, R6			 ; se não chegou, decrementa o contador com o numero atual do passo
-		MOVLS R7, #99			 ; se chegou reinicia o contador para 99
+	ITE MI
+		MOVMI R7, #99			 ; se chegou reinicia o contador para 99
+		SUBPL R7, R6			 ; se não chegou, decrementa o contador com o numero atual do passo
 	BX LR
 
 

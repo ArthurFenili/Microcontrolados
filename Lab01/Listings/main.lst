@@ -125,7 +125,7 @@ x6D, 0x7D, 0x07, 0x7F, 0x6F
                                                             ncrementar/decremen
                                                             tar contador
    75 00000036 BF08            IT               EQ
-   76 00000038 F000 F828       BLEQ             chamaLED    ; se for momento de
+   76 00000038 F000 F827       BLEQ             chamaLED    ; se for momento de
                                                              piscar led, chama 
                                                             a subrotina de pisc
 
@@ -205,107 +205,113 @@ ARM Macro Assembler    Page 4
                                                             ento do contador
   109 00000076         
   110 00000076         contadorCrescente
-  111 00000076 4437            ADD              R7, R7, R6
-  112 00000078 2F63            CMP              R7, #99     ;     ; verifica se
+  111 00000076 2F63            CMP              R7, #99     ;     ; verifica se
                                                              o contador chegou 
                                                             em 99
-  113 0000007A BF28            IT               HS
+  112 00000078 BF34            ITE              LO
+  113 0000007A 4437            ADDLO            R7, R6      ;    ; se não cheg
+                                                            ou, incrementa o co
+                                                            ntador com o numero
+                                                             atual do passo
   114 0000007C 2700            MOVHS            R7, #0      ; se chegou reinici
                                                             a o contador para 0
                                                             
   115 0000007E 4770            BX               LR
   116 00000080         
   117 00000080         contadorDecrescente
-  118 00000080 EBA7 0706       SUB              R7, R7, R6
-  119 00000084 2F00            CMP              R7, #0      ; verifica se o con
+  118 00000080 2F00            CMP              R7, #0      ; verifica se o con
                                                             tador chegou em 0
-  120 00000086 BF98            IT               LS
-  121 00000088 2763            MOVLS            R7, #99     ; se chegou reinici
+  119 00000082 BF4C            ITE              MI
+  120 00000084 2763            MOVMI            R7, #99     ; se chegou reinici
                                                             a o contador para 9
                                                             9
-  122 0000008A 4770            BX               LR
-  123 0000008C         
-  124 0000008C         
-  125 0000008C         chamaLED
-  126 0000008C         ; Pisca LED de fora pra dentro
-  127 0000008C F04F 0801       MOV              R8, #1
-  128 00000090 4444            ADD              R4, R4, R8  ; incrementa em 1 o
+  121 00000086 1BBF            SUBPL            R7, R6      ; se não chegou, d
+                                                            ecrementa o contado
+                                                            r com o numero atua
+                                                            l do passo
+  122 00000088 4770            BX               LR
+  123 0000008A         
+  124 0000008A         
+  125 0000008A         chamaLED
+  126 0000008A         ; Pisca LED de fora pra dentro
+  127 0000008A F04F 0801       MOV              R8, #1
+  128 0000008E 4444            ADD              R4, R4, R8  ; incrementa em 1 o
                                                              estágio do led
-  129 00000092 2C07            CMP              R4, #7      ; verifica se o est
+  129 00000090 2C07            CMP              R4, #7      ; verifica se o est
                                                             ágio do led já ch
                                                             egou no ultimo
-  130 00000094 BF88            IT               HI
-  131 00000096 2400            MOVHI            R4, #0      ; se sim, reinicia
-  132 00000098 4770            BX               LR
-  133 0000009A         
-  134 0000009A         Pisca_Transistor_PP5
-  135 0000009A F04F 0020       MOV              R0, #2_00100000
-  136 0000009E B500            PUSH             {LR}
-  137 000000A0 F7FF FFFE       BL               PortP_Output ; chama a subrotin
+  130 00000092 BF88            IT               HI
+  131 00000094 2400            MOVHI            R4, #0      ; se sim, reinicia
+  132 00000096 4770            BX               LR
+  133 00000098         
+  134 00000098         Pisca_Transistor_PP5
+  135 00000098 F04F 0020       MOV              R0, #2_00100000
+  136 0000009C B500            PUSH             {LR}
+  137 0000009E F7FF FFFE       BL               PortP_Output ; chama a subrotin
                                                             a para ativar o tra
                                                             nsistor
-  138 000000A4 F04F 0001       MOV              R0, #1
-  139 000000A8 F7FF FFFE       BL               SysTick_Wait1ms
-  140 000000AC F04F 0000       MOV              R0, #2_00000000
-  141 000000B0 F7FF FFFE       BL               PortP_Output ; chama a subrotin
+  138 000000A2 F04F 0001       MOV              R0, #1
+  139 000000A6 F7FF FFFE       BL               SysTick_Wait1ms
+  140 000000AA F04F 0000       MOV              R0, #2_00000000
+  141 000000AE F7FF FFFE       BL               PortP_Output ; chama a subrotin
                                                             a para desativar o 
                                                             transistor
-  142 000000B4 F04F 0001       MOV              R0, #1
-  143 000000B8 F7FF FFFE       BL               SysTick_Wait1ms
-  144 000000BC F85D EB04       POP              {LR}
-  145 000000C0 4770            BX               LR
-  146 000000C2         
-  147 000000C2         Pisca_Transistor_PB4
-  148 000000C2 F04F 0010       MOV              R0, #2_00010000
-  149 000000C6 B500            PUSH             {LR}
+  142 000000B2 F04F 0001       MOV              R0, #1
+  143 000000B6 F7FF FFFE       BL               SysTick_Wait1ms
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-  150 000000C8 F7FF FFFE       BL               PortB_Output ; chama a subrotin
+  144 000000BA F85D EB04       POP              {LR}
+  145 000000BE 4770            BX               LR
+  146 000000C0         
+  147 000000C0         Pisca_Transistor_PB4
+  148 000000C0 F04F 0010       MOV              R0, #2_00010000
+  149 000000C4 B500            PUSH             {LR}
+  150 000000C6 F7FF FFFE       BL               PortB_Output ; chama a subrotin
                                                             a para ativar o tra
                                                             nsistor
-  151 000000CC F04F 0001       MOV              R0, #1
-  152 000000D0 F7FF FFFE       BL               SysTick_Wait1ms
-  153 000000D4 F04F 0000       MOV              R0, #2_00000000
-  154 000000D8 F7FF FFFE       BL               PortB_Output ; chama a subrotin
+  151 000000CA F04F 0001       MOV              R0, #1
+  152 000000CE F7FF FFFE       BL               SysTick_Wait1ms
+  153 000000D2 F04F 0000       MOV              R0, #2_00000000
+  154 000000D6 F7FF FFFE       BL               PortB_Output ; chama a subrotin
                                                             a para desativar o 
                                                             transistor
-  155 000000DC F04F 0001       MOV              R0, #1
-  156 000000E0 F7FF FFFE       BL               SysTick_Wait1ms
-  157 000000E4 F85D EB04       POP              {LR}
-  158 000000E8 4770            BX               LR
-  159 000000EA         
-  160 000000EA         Pisca_Transistor_PB5
-  161 000000EA F04F 0020       MOV              R0, #2_00100000
-  162 000000EE B500            PUSH             {LR}
-  163 000000F0 F7FF FFFE       BL               PortB_Output ; chama a subrotin
+  155 000000DA F04F 0001       MOV              R0, #1
+  156 000000DE F7FF FFFE       BL               SysTick_Wait1ms
+  157 000000E2 F85D EB04       POP              {LR}
+  158 000000E6 4770            BX               LR
+  159 000000E8         
+  160 000000E8         Pisca_Transistor_PB5
+  161 000000E8 F04F 0020       MOV              R0, #2_00100000
+  162 000000EC B500            PUSH             {LR}
+  163 000000EE F7FF FFFE       BL               PortB_Output ; chama a subrotin
                                                             a para ativar o tra
                                                             nsistor
-  164 000000F4 F04F 0001       MOV              R0, #1
-  165 000000F8 F7FF FFFE       BL               SysTick_Wait1ms
-  166 000000FC F04F 0000       MOV              R0, #2_00000000
-  167 00000100 F7FF FFFE       BL               PortB_Output ; chama a subrotin
+  164 000000F2 F04F 0001       MOV              R0, #1
+  165 000000F6 F7FF FFFE       BL               SysTick_Wait1ms
+  166 000000FA F04F 0000       MOV              R0, #2_00000000
+  167 000000FE F7FF FFFE       BL               PortB_Output ; chama a subrotin
                                                             a para desativar o 
                                                             transistor
-  168 00000104 F04F 0001       MOV              R0, #1
-  169 00000108 F7FF FFFE       BL               SysTick_Wait1ms
-  170 0000010C F85D EB04       POP              {LR}
-  171 00000110 4770            BX               LR
-  172 00000112         
-  173 00000112         ; ------------------------------------------------------
+  168 00000102 F04F 0001       MOV              R0, #1
+  169 00000106 F7FF FFFE       BL               SysTick_Wait1ms
+  170 0000010A F85D EB04       POP              {LR}
+  171 0000010E 4770            BX               LR
+  172 00000110         
+  173 00000110         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-  174 00000112         ; Fim do Arquivo
-  175 00000112         ; ------------------------------------------------------
+  174 00000110         ; Fim do Arquivo
+  175 00000110         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-  176 00000112 00 00           ALIGN                        ;Garante que o fim 
+  176 00000110                 ALIGN                        ;Garante que o fim 
                                                             da seção está al
                                                             inhada 
-  177 00000114                 END                          ;Fim do arquivo
+  177 00000110                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\Arthur\AppData\Local\Ar
 m\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" 
@@ -358,7 +364,7 @@ Symbol: MainLoop
       At line 96 in file main.s
       At line 103 in file main.s
 
-Pisca_Transistor_PB4 000000C2
+Pisca_Transistor_PB4 000000C0
 
 Symbol: Pisca_Transistor_PB4
    Definitions
@@ -366,7 +372,7 @@ Symbol: Pisca_Transistor_PB4
    Uses
       At line 38 in file main.s
 Comment: Pisca_Transistor_PB4 used once
-Pisca_Transistor_PB5 000000EA
+Pisca_Transistor_PB5 000000E8
 
 Symbol: Pisca_Transistor_PB5
    Definitions
@@ -374,7 +380,7 @@ Symbol: Pisca_Transistor_PB5
    Uses
       At line 39 in file main.s
 Comment: Pisca_Transistor_PB5 used once
-Pisca_Transistor_PP5 0000009A
+Pisca_Transistor_PP5 00000098
 
 Symbol: Pisca_Transistor_PP5
    Definitions
@@ -420,7 +426,7 @@ Symbol: chamaContador
    Uses
       At line 80 in file main.s
 Comment: chamaContador used once
-chamaLED 0000008C
+chamaLED 0000008A
 
 Symbol: chamaLED
    Definitions
