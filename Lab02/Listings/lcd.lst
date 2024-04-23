@@ -1,0 +1,421 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; lcd.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Template by Prof. Guilherme Peron - 24/08/2020
+    4 00000000         
+    5 00000000         ; ------------------------------------------------------
+                       -------------------------
+    6 00000000                 THUMB                        ; Instru??es do tip
+                                                            o Thumb-2
+    7 00000000         ; ------------------------------------------------------
+                       -------------------------
+    8 00000000         
+    9 00000000         ; Declara??es EQU - Defines
+   10 00000000         ;<NOME>         EQU <VALOR>
+   11 00000000         ; ========================
+   12 00000000         ; ------------------------------------------------------
+                       -------------------------
+   13 00000000         ; ?rea de Dados - Declara??es de vari?veis
+   14 00000000                 AREA             DATA, ALIGN=2
+   15 00000000         ; Se alguma vari?vel for chamada em outro arquivo
+   16 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       ri?vel <var> a 
+   17 00000000         ; partir de outro arquivo
+   18 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       vari?vel de nome <var>
+   19 00000000         ; de <tam> bytes a partir da primeira 
+   20 00000000         ; posi??o da RAM  
+   21 00000000         
+   22 00000000         ; ------------------------------------------------------
+                       -------------------------
+   23 00000000         ; ?rea de C?digo - Tudo abaixo da diretiva a seguir ser?
+                        armazenado na mem?ria de 
+   24 00000000         ;                  c?digo
+   25 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   26 00000000         
+   27 00000000         ; Se alguma fun??o do arquivo for chamada em outro arqui
+                       vo
+   28 00000000         ; EXPORT <func>    ; Permite chamar a fun??o a partir de
+                        outro arquivo
+   29 00000000                 EXPORT           LCD_Init
+   30 00000000                 EXPORT           LCD_Line2
+   31 00000000                 EXPORT           LCD_PrintString
+   32 00000000                 EXPORT           LCD_Reset
+   33 00000000         
+   34 00000000         ; Se chamar alguma fun??o externa 
+   35 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma fun??o de outro
+   36 00000000                 IMPORT           PortM_Output ; Permite chamar P
+                                                            ortM_Output de outr
+                                                            o arquivo
+   37 00000000                 IMPORT           PortK_Output ; Permite chamar P
+                                                            ortK_Output de outr
+                                                            o arquivo
+   38 00000000                 IMPORT           SysTick_Wait1ms ; Permite chama
+                                                            r SysTick_Wait1ms d
+                                                            e outro arquivo
+   39 00000000         ; ------------------------------------------------------
+                       -------------------------
+   40 00000000         ; Função LCD_Init
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   41 00000000         ; Inicializaçã do LCD
+   42 00000000         ; Parametro de entrada: Não tem
+   43 00000000         ; Parametro de saída: Não tem
+   44 00000000         LCD_Init
+   45 00000000 B500            PUSH             {LR}
+   46 00000002         
+   47 00000002 F04F 0338       MOV              R3, #0x38   ; Inicializar no mo
+                                                            do 2 linhas/caracte
+                                                            r matriz 5x7
+   48 00000006 F000 F80F       BL               LCD_Instruction
+   49 0000000A         
+   50 0000000A F04F 0306       MOV              R3, #0x06   ; Cursor com autoin
+                                                            cremento para direi
+                                                            ta
+   51 0000000E F000 F80B       BL               LCD_Instruction
+   52 00000012         
+   53 00000012 F04F 030E       MOV              R3, #0x0E   ; Configurar o curs
+                                                            or (habilitar o dis
+                                                            play + cursor + não
+                                                            -pisca)
+   54 00000016 F000 F807       BL               LCD_Instruction
+   55 0000001A         
+   56 0000001A F04F 0301       MOV              R3, #0x01   ; Resetar: Limpar o
+                                                             display e levar o 
+                                                            cursor para o home
+   57 0000001E F000 F803       BL               LCD_Instruction
+   58 00000022         
+   59 00000022 F85D EB04       POP              {LR}
+   60 00000026 4770            BX               LR
+   61 00000028         
+   62 00000028         ; Função LCD_Instruction
+   63 00000028         ; Recebe uma instrução e a executa
+   64 00000028         ; Parametro de entrada: R3
+   65 00000028         ; Parametro de saída: Não tem
+   66 00000028         LCD_Instruction
+   67 00000028 B500            PUSH             {LR}
+   68 0000002A         
+   69 0000002A F04F 0004       MOV              R0, #2_00000100 ; Ativa o LCD (
+                                                            EN=1, RW=0, RS=0)
+   70 0000002E F7FF FFFE       BL               PortM_Output
+   71 00000032         
+   72 00000032 4618            MOV              R0, R3      ; Escreve no barram
+                                                            ento de dados o com
+                                                            ando
+   73 00000034 F7FF FFFE       BL               PortK_Output
+   74 00000038         
+   75 00000038 F04F 000A       MOV              R0, #10     ; Delay de 10ms par
+                                                            a executar (bem mai
+                                                            s do que os 40us ou
+                                                             1,64ms necess?rios
+                                                            )
+   76 0000003C F7FF FFFE       BL               SysTick_Wait1ms
+   77 00000040         
+   78 00000040 F04F 0000       MOV              R0, #2_00000000 ; Desativa o LC
+                                                            D (EN=0, RW=0, RS=0
+                                                            )
+   79 00000044 F7FF FFFE       BL               PortM_Output
+   80 00000048         
+   81 00000048 F85D EB04       POP              {LR}
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   82 0000004C 4770            BX               LR
+   83 0000004E         
+   84 0000004E         ; Função LCD_Data
+   85 0000004E         ; Recebe um dado e o escreve
+   86 0000004E         ; Parametro de entrada: R3
+   87 0000004E         ; Parametro de saída: Não tem
+   88 0000004E         LCD_Data
+   89 0000004E B500            PUSH             {LR}
+   90 00000050         
+   91 00000050 F04F 0005       MOV              R0, #2_00000101 ; Ativa o LCD e
+                                                             RS para enviar os 
+                                                            dados (EN=1, RW=0, 
+                                                            RS=1)
+   92 00000054 F7FF FFFE       BL               PortM_Output
+   93 00000058         
+   94 00000058 4618            MOV              R0, R3      ; Escreve no barram
+                                                            ento de dados
+   95 0000005A F7FF FFFE       BL               PortK_Output
+   96 0000005E         
+   97 0000005E F04F 000A       MOV              R0, #10     ; Delay de 10ms par
+                                                            a executar (bem mai
+                                                            s do que os 40us ou
+                                                             1,64ms necess?rios
+                                                            )
+   98 00000062 F7FF FFFE       BL               SysTick_Wait1ms
+   99 00000066         
+  100 00000066 F04F 0000       MOV              R0, #2_00000000 ; Desativa o LC
+                                                            D (EN=0, RW=0, RS=0
+                                                            )
+  101 0000006A F7FF FFFE       BL               PortM_Output
+  102 0000006E         
+  103 0000006E F85D EB04       POP              {LR}
+  104 00000072 4770            BX               LR
+  105 00000074         
+  106 00000074         ; Função LCD_Line2
+  107 00000074         ; Prepara a escrita na segunda linha do LCD
+  108 00000074         ; Parametro de entrada: Não tem
+  109 00000074         ; Parametro de saída: Não tem
+  110 00000074         LCD_Line2
+  111 00000074 B500            PUSH             {LR}
+  112 00000076         
+  113 00000076 F04F 03C0       MOV              R3, #0xC0   ; Endereço da prime
+                                                            ira posição - Segun
+                                                            da Linha
+  114 0000007A F7FF FFD5       BL               LCD_Instruction
+  115 0000007E         
+  116 0000007E F04F 000A       MOV              R0, #10     ; Delay de 10ms par
+                                                            a executar (bem mai
+                                                            s do que os 40us ou
+                                                             1,64ms necess?rios
+                                                            )
+  117 00000082 F7FF FFFE       BL               SysTick_Wait1ms
+  118 00000086         
+  119 00000086 F85D EB04       POP              {LR}
+  120 0000008A 4770            BX               LR
+  121 0000008C         
+  122 0000008C         ; Funções LCD_PrintString, LCD_PrintChar e LCD_EndOfStri
+                       ng
+  123 0000008C         ; Imprimem uma string no LCD atraves de um loop
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  124 0000008C         ; Parametro de entrada: R4 -> A string a ser escrita
+  125 0000008C         ; Parametro de sa?da: Nao tem
+  126 0000008C         LCD_PrintString
+  127 0000008C B500            PUSH             {LR}
+  128 0000008E         LCD_PrintChar
+  129 0000008E F814 3B01       LDRB             R3, [R4], #1 ; Le um caractere 
+                                                            da string e desloca
+                                                             para o proximo
+  130 00000092         
+  131 00000092 2B00            CMP              R3, #0      ; Verifica se chego
+                                                            u no final da strin
+                                                            g
+  132 00000094 D002            BEQ              LCD_EndOfString
+  133 00000096         
+  134 00000096 F7FF FFDA       BL               LCD_Data    ; Escreve o caracte
+                                                            re
+  135 0000009A         
+  136 0000009A E7F8            B                LCD_PrintChar ; Continua iteran
+                                                            do sobre a string a
+                                                            te chegar no fim
+  137 0000009C         LCD_EndOfString
+  138 0000009C F04F 000A       MOV              R0, #10     ; Delay de 10ms par
+                                                            a executar (bem mai
+                                                            s do que os 40us ou
+                                                             1,64ms necessarios
+                                                            )
+  139 000000A0 F7FF FFFE       BL               SysTick_Wait1ms
+  140 000000A4         
+  141 000000A4 F85D EB04       POP              {LR}        ; A string foi escr
+                                                            ita. Retorna
+  142 000000A8 4770            BX               LR
+  143 000000AA         
+  144 000000AA         ; Função LCD_Reset
+  145 000000AA         ; Limpa o display e leva o cursor para o home
+  146 000000AA         ; Parametro de entrada: Nao tem
+  147 000000AA         ; Parametro de sa?da: Nao tem
+  148 000000AA         LCD_Reset
+  149 000000AA B500            PUSH             {LR}
+  150 000000AC         
+  151 000000AC F04F 0301       MOV              R3, #0x01   ; Resetar: Limpar o
+                                                             display e levar o 
+                                                            cursor para o home
+  152 000000B0 F7FF FFBA       BL               LCD_Instruction
+  153 000000B4         
+  154 000000B4 F04F 000A       MOV              R0, #10     ; Delay de 10ms par
+                                                            a executar (bem mai
+                                                            s do que os 40us ou
+                                                             1,64ms necess?rios
+                                                            )
+  155 000000B8 F7FF FFFE       BL               SysTick_Wait1ms
+  156 000000BC         
+  157 000000BC F85D EB04       POP              {LR}
+  158 000000C0 4770            BX               LR
+  159 000000C2         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+  160 000000C2         ; Fim do Arquivo
+  161 000000C2         ; ------------------------------------------------------
+                       --------------------------------------------------------
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+                       ----------- 
+  162 000000C2 00 00           ALIGN                        ;Garante que o fim 
+                                                            da se??o est? alinh
+                                                            ada 
+  163 000000C4                 END                          ;Fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=.\objects\lcd.d -o.\objects\lcd.o -IC:\Users\suzib\AppData\L
+ocal\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL S
+ETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SETA
+ 1" --list=.\listings\lcd.lst lcd.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 14 in file lcd.s
+   Uses
+      None
+Comment: DATA unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 25 in file lcd.s
+   Uses
+      None
+Comment: .text unused
+LCD_Data 0000004E
+
+Symbol: LCD_Data
+   Definitions
+      At line 88 in file lcd.s
+   Uses
+      At line 134 in file lcd.s
+Comment: LCD_Data used once
+LCD_EndOfString 0000009C
+
+Symbol: LCD_EndOfString
+   Definitions
+      At line 137 in file lcd.s
+   Uses
+      At line 132 in file lcd.s
+Comment: LCD_EndOfString used once
+LCD_Init 00000000
+
+Symbol: LCD_Init
+   Definitions
+      At line 44 in file lcd.s
+   Uses
+      At line 29 in file lcd.s
+Comment: LCD_Init used once
+LCD_Instruction 00000028
+
+Symbol: LCD_Instruction
+   Definitions
+      At line 66 in file lcd.s
+   Uses
+      At line 48 in file lcd.s
+      At line 51 in file lcd.s
+      At line 54 in file lcd.s
+      At line 57 in file lcd.s
+      At line 114 in file lcd.s
+      At line 152 in file lcd.s
+
+LCD_Line2 00000074
+
+Symbol: LCD_Line2
+   Definitions
+      At line 110 in file lcd.s
+   Uses
+      At line 30 in file lcd.s
+Comment: LCD_Line2 used once
+LCD_PrintChar 0000008E
+
+Symbol: LCD_PrintChar
+   Definitions
+      At line 128 in file lcd.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 136 in file lcd.s
+Comment: LCD_PrintChar used once
+LCD_PrintString 0000008C
+
+Symbol: LCD_PrintString
+   Definitions
+      At line 126 in file lcd.s
+   Uses
+      At line 31 in file lcd.s
+Comment: LCD_PrintString used once
+LCD_Reset 000000AA
+
+Symbol: LCD_Reset
+   Definitions
+      At line 148 in file lcd.s
+   Uses
+      At line 32 in file lcd.s
+Comment: LCD_Reset used once
+9 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PortK_Output 00000000
+
+Symbol: PortK_Output
+   Definitions
+      At line 37 in file lcd.s
+   Uses
+      At line 73 in file lcd.s
+      At line 95 in file lcd.s
+
+PortM_Output 00000000
+
+Symbol: PortM_Output
+   Definitions
+      At line 36 in file lcd.s
+   Uses
+      At line 70 in file lcd.s
+      At line 79 in file lcd.s
+      At line 92 in file lcd.s
+      At line 101 in file lcd.s
+
+SysTick_Wait1ms 00000000
+
+Symbol: SysTick_Wait1ms
+   Definitions
+      At line 38 in file lcd.s
+   Uses
+      At line 76 in file lcd.s
+      At line 98 in file lcd.s
+      At line 117 in file lcd.s
+      At line 139 in file lcd.s
+      At line 155 in file lcd.s
+
+3 symbols
+347 symbols in table

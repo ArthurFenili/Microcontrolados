@@ -1,0 +1,883 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; matrix_keyboard.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Template by Prof. Guilherme Peron - 24/08/2020
+    4 00000000         
+    5 00000000         ; ------------------------------------------------------
+                       -------------------------
+    6 00000000                 THUMB                        ; Instru??es do tip
+                                                            o Thumb-2
+    7 00000000         ; ------------------------------------------------------
+                       -------------------------
+    8 00000000         
+    9 00000000         ; Declara??es EQU - Defines
+   10 00000000         ;<NOME>         EQU <VALOR>
+   11 00000000         ; ========================
+   12 00000000 00000004 
+                       CLOSING EQU              4
+   13 00000000         ; ------------------------------------------------------
+                       -------------------------
+   14 00000000         ; ?rea de Dados - Declara??es de vari?veis
+   15 00000000                 AREA             DATA, ALIGN=2
+   16 00000000         ; Se alguma vari?vel for chamada em outro arquivo
+   17 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       ri?vel <var> a 
+   18 00000000         ; partir de outro arquivo
+   19 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       vari?vel de nome <var>
+   20 00000000         ; de <tam> bytes a partir da primeira 
+   21 00000000         ; posi??o da RAM  
+   22 00000000         
+   23 00000000         ; ------------------------------------------------------
+                       -------------------------
+   24 00000000         ; ?rea de C?digo - Tudo abaixo da diretiva a seguir ser?
+                        armazenado na mem?ria de 
+   25 00000000         ;                  c?digo
+   26 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   27 00000000         
+   28 00000000         ; Se alguma fun??o do arquivo for chamada em outro arqui
+                       vo
+   29 00000000         ; EXPORT <func>    ; Permite chamar a fun??o a partir de
+                        outro arquivo
+   30 00000000                 EXPORT           MapMatrixKeyboard
+   31 00000000         
+   32 00000000         ; Se chamar alguma fun??o externa 
+   33 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma fun??o de outro
+   34 00000000                 IMPORT           PortM_Output
+   35 00000000                 IMPORT           PortL_Input
+   36 00000000                 IMPORT           LCD_PrintString
+   37 00000000                 IMPORT           SysTick_Wait1ms
+   38 00000000         ; ------------------------------------------------------
+                       -------------------------
+   39 00000000         
+   40 00000000         ; Fun??o MapMatrixKeyboard
+   41 00000000         ; Mapeia o teclado matricial
+   42 00000000         ; Par?metro de entrada:
+   43 00000000         ; Par?metro de sa?da:
+   44 00000000         MapMatrixKeyboard
+   45 00000000 B500            PUSH             {LR}
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   46 00000002         
+   47 00000002         ; ------------------------------------------------------
+                       -----
+   48 00000002 F04F 00E0       MOV              R0, #2_11100000 ; Iterando sobr
+                                                            e a primeira coluna
+                                                            
+   49 00000006 F7FF FFFE       BL               PortM_Output
+   50 0000000A F7FF FFFE       BL               PortL_Input
+   51 0000000E         
+   52 0000000E 280E            CMP              R0, #2_1110 ; Numero 1 foi pres
+                                                            sionado
+   53 00000010 D033            BEQ              DIGIT_1
+   54 00000012         
+   55 00000012 280D            CMP              R0, #2_1101 ; Numero 4 foi pres
+                                                            sionado
+   56 00000014 D058            BEQ              DIGIT_4
+   57 00000016         
+   58 00000016 280B            CMP              R0, #2_1011 ; Numero 7 foi pres
+                                                            sionado
+   59 00000018 D07D            BEQ              DIGIT_7
+   60 0000001A         
+   61 0000001A 2807            CMP              R0, #2_0111 ; Simbolo * foi pre
+                                                            ssionado
+   62 0000001C F000 80A2       BEQ.W            DIGIT_AST   ; Error: Branch off
+                                                            set out of range (B
+                                                            EQ.W corrige o prob
+                                                            lema)
+   63 00000020         ; ------------------------------------------------------
+                       -----
+   64 00000020         
+   65 00000020         ; ------------------------------------------------------
+                       -----
+   66 00000020 F04F 00D0       MOV              R0, #2_11010000 ; Iterando sobr
+                                                            e a segunda coluna
+   67 00000024 F7FF FFFE       BL               PortM_Output
+   68 00000028 F7FF FFFE       BL               PortL_Input
+   69 0000002C         
+   70 0000002C 280E            CMP              R0, #2_1110 ; Numero 2 foi pres
+                                                            sionado
+   71 0000002E D031            BEQ              DIGIT_2
+   72 00000030         
+   73 00000030 280D            CMP              R0, #2_1101 ; Numero 5 foi pres
+                                                            sionado
+   74 00000032 D056            BEQ              DIGIT_5
+   75 00000034         
+   76 00000034 280B            CMP              R0, #2_1011 ; Numero 8 foi pres
+                                                            sionado
+   77 00000036 D07B            BEQ              DIGIT_8
+   78 00000038         
+   79 00000038 2807            CMP              R0, #2_0111 ; Numero 0 foi pres
+                                                            sionado
+   80 0000003A D011            BEQ              DIGIT_0
+   81 0000003C         ; ------------------------------------------------------
+                       -----
+   82 0000003C         
+   83 0000003C         ; ------------------------------------------------------
+                       -----
+   84 0000003C F04F 00B0       MOV              R0, #2_10110000 ; Iterando sobr
+                                                            e a terceira coluna
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                                                            
+   85 00000040 F7FF FFFE       BL               PortM_Output
+   86 00000044 F7FF FFFE       BL               PortL_Input
+   87 00000048         
+   88 00000048 280E            CMP              R0, #2_1110 ; Numero 3 foi pres
+                                                            sionado
+   89 0000004A D030            BEQ              DIGIT_3
+   90 0000004C         
+   91 0000004C 280D            CMP              R0, #2_1101 ; Numero 6 foi pres
+                                                            sionado
+   92 0000004E D055            BEQ              DIGIT_6
+   93 00000050         
+   94 00000050 280B            CMP              R0, #2_1011 ; Numero 9 foi pres
+                                                            sionado
+   95 00000052 D07A            BEQ              DIGIT_9
+   96 00000054         
+   97 00000054 2807            CMP              R0, #2_0111 ; Símbolo # foi pre
+                                                            ssionado
+   98 00000056 F000 8092       BEQ.W            DIGIT_HASH  ; Error: Branch off
+                                                            set out of range (B
+                                                            EQ.W corrige o prob
+                                                            lema)
+   99 0000005A         ; ------------------------------------------------------
+                       -----
+  100 0000005A         
+  101 0000005A F85D EB04       POP              {LR}
+  102 0000005E 4770            BX               LR
+  103 00000060         
+  104 00000060         ; Funções DIGIT_X
+  105 00000060         ; Tratam a resposta do sistema para cada tecla pressiona
+                       da
+  106 00000060         ; Parametro de entrada: N?o tem
+  107 00000060         ; Parametro de saída: R6 -> O dígito inserido
+  108 00000060         DIGIT_0
+  109 00000060 B500            PUSH             {LR}
+  110 00000062         
+  111 00000062 F04F 0600       MOV              R6, #0x0    ; Guarda o d?gito i
+                                                            nserido
+  112 00000066         
+  113 00000066 4C54            LDR              R4, =DIGIT_0_STR ; Imprime o d?
+                                                            gito no LCD
+  114 00000068 F7FF FFFE       BL               LCD_PrintString
+  115 0000006C         
+  116 0000006C F000 F890       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  117 00000070         
+  118 00000070 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  119 00000074         
+  120 00000074 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  121 00000078 4770            BX               LR
+  122 0000007A         
+  123 0000007A         DIGIT_1
+  124 0000007A B500            PUSH             {LR}
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  125 0000007C         
+  126 0000007C F04F 0601       MOV              R6, #0x1    ; Guarda o d?gito i
+                                                            nserido
+  127 00000080         
+  128 00000080 4C4E            LDR              R4, =DIGIT_1_STR ; Imprime o d?
+                                                            gito no LCD
+  129 00000082 F7FF FFFE       BL               LCD_PrintString
+  130 00000086         
+  131 00000086 F000 F883       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  132 0000008A         
+  133 0000008A F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  134 0000008E         
+  135 0000008E F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  136 00000092 4770            BX               LR
+  137 00000094         
+  138 00000094         DIGIT_2
+  139 00000094 B500            PUSH             {LR}
+  140 00000096         
+  141 00000096 F04F 0602       MOV              R6, #0x2    ; Guarda o d?gito i
+                                                            nserido
+  142 0000009A         
+  143 0000009A 4C49            LDR              R4, =DIGIT_2_STR ; Imprime o d?
+                                                            gito no LCD
+  144 0000009C F7FF FFFE       BL               LCD_PrintString
+  145 000000A0         
+  146 000000A0 F000 F876       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  147 000000A4         
+  148 000000A4 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  149 000000A8         
+  150 000000A8 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  151 000000AC 4770            BX               LR
+  152 000000AE         
+  153 000000AE         DIGIT_3
+  154 000000AE B500            PUSH             {LR}
+  155 000000B0         
+  156 000000B0 F04F 0603       MOV              R6, #0x3    ; Guarda o d?gito i
+                                                            nserido
+  157 000000B4         
+  158 000000B4 4C43            LDR              R4, =DIGIT_3_STR ; Imprime o d?
+                                                            gito no LCD
+  159 000000B6 F7FF FFFE       BL               LCD_PrintString
+  160 000000BA         
+  161 000000BA F000 F869       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  162 000000BE         
+  163 000000BE F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  164 000000C2         
+  165 000000C2 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  166 000000C6 4770            BX               LR
+  167 000000C8         
+  168 000000C8         DIGIT_4
+  169 000000C8 B500            PUSH             {LR}
+  170 000000CA         
+  171 000000CA F04F 0604       MOV              R6, #0x4    ; Guarda o d?gito i
+                                                            nserido
+  172 000000CE         
+  173 000000CE 4C3E            LDR              R4, =DIGIT_4_STR ; Imprime o d?
+                                                            gito no LCD
+  174 000000D0 F7FF FFFE       BL               LCD_PrintString
+  175 000000D4         
+  176 000000D4 F000 F85C       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  177 000000D8         
+  178 000000D8 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  179 000000DC         
+  180 000000DC F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  181 000000E0 4770            BX               LR
+  182 000000E2         
+  183 000000E2         DIGIT_5
+  184 000000E2 B500            PUSH             {LR}
+  185 000000E4         
+  186 000000E4 F04F 0605       MOV              R6, #0x5    ; Guarda o d?gito i
+                                                            nserido
+  187 000000E8         
+  188 000000E8 4C38            LDR              R4, =DIGIT_5_STR ; Imprime o d?
+                                                            gito no LCD
+  189 000000EA F7FF FFFE       BL               LCD_PrintString
+  190 000000EE         
+  191 000000EE F000 F84F       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  192 000000F2         
+  193 000000F2 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  194 000000F6         
+  195 000000F6 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  196 000000FA 4770            BX               LR
+  197 000000FC         
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  198 000000FC         DIGIT_6
+  199 000000FC B500            PUSH             {LR}
+  200 000000FE         
+  201 000000FE F04F 0606       MOV              R6, #0x6    ; Guarda o d?gito i
+                                                            nserido
+  202 00000102         
+  203 00000102 4C33            LDR              R4, =DIGIT_6_STR ; Imprime o d?
+                                                            gito no LCD
+  204 00000104 F7FF FFFE       BL               LCD_PrintString
+  205 00000108         
+  206 00000108 F000 F842       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  207 0000010C         
+  208 0000010C F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  209 00000110         
+  210 00000110 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  211 00000114 4770            BX               LR
+  212 00000116         
+  213 00000116         DIGIT_7
+  214 00000116 B500            PUSH             {LR}
+  215 00000118         
+  216 00000118 F04F 0607       MOV              R6, #0x7    ; Guarda o d?gito i
+                                                            nserido
+  217 0000011C         
+  218 0000011C 4C2D            LDR              R4, =DIGIT_7_STR ; Imprime o d?
+                                                            gito no LCD
+  219 0000011E F7FF FFFE       BL               LCD_PrintString
+  220 00000122         
+  221 00000122 F000 F835       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  222 00000126         
+  223 00000126 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  224 0000012A         
+  225 0000012A F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  226 0000012E 4770            BX               LR
+  227 00000130         
+  228 00000130         DIGIT_8
+  229 00000130 B500            PUSH             {LR}
+  230 00000132         
+  231 00000132 F04F 0608       MOV              R6, #0x8    ; Guarda o d?gito i
+                                                            nserido
+  232 00000136         
+  233 00000136 4C28            LDR              R4, =DIGIT_8_STR ; Imprime o d?
+                                                            gito no LCD
+  234 00000138 F7FF FFFE       BL               LCD_PrintString
+  235 0000013C         
+  236 0000013C F000 F828       BL               Debouncing  ; Trata o bouncing 
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+                                                            da tecla via softwa
+                                                            re
+  237 00000140         
+  238 00000140 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  239 00000144         
+  240 00000144 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  241 00000148 4770            BX               LR
+  242 0000014A         
+  243 0000014A         DIGIT_9
+  244 0000014A B500            PUSH             {LR}
+  245 0000014C         
+  246 0000014C F04F 0609       MOV              R6, #0x9    ; Guarda o d?gito i
+                                                            nserido
+  247 00000150         
+  248 00000150 4C22            LDR              R4, =DIGIT_9_STR ; Imprime o d?
+                                                            gito no LCD
+  249 00000152 F7FF FFFE       BL               LCD_PrintString
+  250 00000156         
+  251 00000156 F000 F81B       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  252 0000015A         
+  253 0000015A F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  254 0000015E         
+  255 0000015E F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  256 00000162 4770            BX               LR
+  257 00000164         
+  258 00000164         DIGIT_AST
+  259 00000164 B500            PUSH             {LR}
+  260 00000166         
+  261 00000166 F04F 060E       MOV              R6, #0xE    ; Guarda o d?gito i
+                                                            nserido
+  262 0000016A         
+  263 0000016A 4C1D            LDR              R4, =DIGIT_AST_STR ; Imprime o 
+                                                            d?gito no LCD
+  264 0000016C F7FF FFFE       BL               LCD_PrintString
+  265 00000170         
+  266 00000170 F000 F80E       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  267 00000174         
+  268 00000174 F107 0701       ADD              R7, R7, #1  ; Incrementa o cont
+                                                            ador de d?gitos ins
+                                                            eridos
+  269 00000178         
+  270 00000178 F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  271 0000017C 4770            BX               LR
+  272 0000017E         
+  273 0000017E         DIGIT_HASH
+  274 0000017E B500            PUSH             {LR}
+  275 00000180         
+  276 00000180 2F04            CMP              R7, #4      ; Verifica se 4 d?g
+                                                            itos j? foram inser
+                                                            idos
+  277 00000182 BF28 2504       MOVHS            R5, #CLOSING ; Senha de 4 d?git
+                                                            os inserida, coloca
+                                                             o cofre em process
+                                                            o de fechamento
+  278 00000186         
+  279 00000186 F000 F803       BL               Debouncing  ; Trata o bouncing 
+                                                            da tecla via softwa
+                                                            re
+  280 0000018A         
+  281 0000018A F85D EB04       POP              {LR}        ; Retorna ap?s d?gi
+                                                            to inserido ter sid
+                                                            o guardado e impres
+                                                            so
+  282 0000018E 4770            BX               LR
+  283 00000190         
+  284 00000190         ; Função Debouncing
+  285 00000190         ; Trata o bouncing da tecla aguardando um tempo fixo (0,
+                       5s)
+  286 00000190         ; Parametro de entrada: Não tem
+  287 00000190         ; Parametro de saída: Não tem
+  288 00000190         Debouncing
+  289 00000190 B500            PUSH             {LR}
+  290 00000192         
+  291 00000192 F44F 70FA       MOV              R0, #500
+  292 00000196 F7FF FFFE       BL               SysTick_Wait1ms
+  293 0000019A         
+  294 0000019A F85D EB04       POP              {LR}
+  295 0000019E 4770            BX               LR
+  296 000001A0         
+  297 000001A0         ; Definição dos textos do LCD
+  298 000001A0 30 00   DIGIT_0_STR
+                               DCB              "0", 0
+  299 000001A2 31 00   DIGIT_1_STR
+                               DCB              "1", 0
+  300 000001A4 32 00   DIGIT_2_STR
+                               DCB              "2", 0
+  301 000001A6 33 00   DIGIT_3_STR
+                               DCB              "3", 0
+  302 000001A8 34 00   DIGIT_4_STR
+                               DCB              "4", 0
+  303 000001AA 35 00   DIGIT_5_STR
+                               DCB              "5", 0
+  304 000001AC 36 00   DIGIT_6_STR
+                               DCB              "6", 0
+  305 000001AE 37 00   DIGIT_7_STR
+                               DCB              "7", 0
+  306 000001B0 38 00   DIGIT_8_STR
+                               DCB              "8", 0
+  307 000001B2 39 00   DIGIT_9_STR
+                               DCB              "9", 0
+  308 000001B4         
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  309 000001B4 2A 00   DIGIT_AST_STR
+                               DCB              "*", 0
+  310 000001B6         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+  311 000001B6         ; Fim do Arquivo
+  312 000001B6         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       ----------- 
+  313 000001B6 00 00           ALIGN                        ; Garante que o fim
+                                                             da se??o est? alin
+                                                            hada 
+  314 000001B8                 END                          ; Fim do arquivo
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=.\objects\teclado.d -o.\objects\teclado.o -IC:\Users\suzib\A
+ppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="
+__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NC
+PDT SETA 1" --list=.\listings\teclado.lst teclado.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 15 in file teclado.s
+   Uses
+      None
+Comment: DATA unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 26 in file teclado.s
+   Uses
+      None
+Comment: .text unused
+DIGIT_0 00000060
+
+Symbol: DIGIT_0
+   Definitions
+      At line 108 in file teclado.s
+   Uses
+      At line 80 in file teclado.s
+Comment: DIGIT_0 used once
+DIGIT_0_STR 000001A0
+
+Symbol: DIGIT_0_STR
+   Definitions
+      At line 298 in file teclado.s
+   Uses
+      At line 113 in file teclado.s
+Comment: DIGIT_0_STR used once
+DIGIT_1 0000007A
+
+Symbol: DIGIT_1
+   Definitions
+      At line 123 in file teclado.s
+   Uses
+      At line 53 in file teclado.s
+Comment: DIGIT_1 used once
+DIGIT_1_STR 000001A2
+
+Symbol: DIGIT_1_STR
+   Definitions
+      At line 299 in file teclado.s
+   Uses
+      At line 128 in file teclado.s
+Comment: DIGIT_1_STR used once
+DIGIT_2 00000094
+
+Symbol: DIGIT_2
+   Definitions
+      At line 138 in file teclado.s
+   Uses
+      At line 71 in file teclado.s
+Comment: DIGIT_2 used once
+DIGIT_2_STR 000001A4
+
+Symbol: DIGIT_2_STR
+   Definitions
+      At line 300 in file teclado.s
+   Uses
+      At line 143 in file teclado.s
+Comment: DIGIT_2_STR used once
+DIGIT_3 000000AE
+
+Symbol: DIGIT_3
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 153 in file teclado.s
+   Uses
+      At line 89 in file teclado.s
+Comment: DIGIT_3 used once
+DIGIT_3_STR 000001A6
+
+Symbol: DIGIT_3_STR
+   Definitions
+      At line 301 in file teclado.s
+   Uses
+      At line 158 in file teclado.s
+Comment: DIGIT_3_STR used once
+DIGIT_4 000000C8
+
+Symbol: DIGIT_4
+   Definitions
+      At line 168 in file teclado.s
+   Uses
+      At line 56 in file teclado.s
+Comment: DIGIT_4 used once
+DIGIT_4_STR 000001A8
+
+Symbol: DIGIT_4_STR
+   Definitions
+      At line 302 in file teclado.s
+   Uses
+      At line 173 in file teclado.s
+Comment: DIGIT_4_STR used once
+DIGIT_5 000000E2
+
+Symbol: DIGIT_5
+   Definitions
+      At line 183 in file teclado.s
+   Uses
+      At line 74 in file teclado.s
+Comment: DIGIT_5 used once
+DIGIT_5_STR 000001AA
+
+Symbol: DIGIT_5_STR
+   Definitions
+      At line 303 in file teclado.s
+   Uses
+      At line 188 in file teclado.s
+Comment: DIGIT_5_STR used once
+DIGIT_6 000000FC
+
+Symbol: DIGIT_6
+   Definitions
+      At line 198 in file teclado.s
+   Uses
+      At line 92 in file teclado.s
+Comment: DIGIT_6 used once
+DIGIT_6_STR 000001AC
+
+Symbol: DIGIT_6_STR
+   Definitions
+      At line 304 in file teclado.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 203 in file teclado.s
+Comment: DIGIT_6_STR used once
+DIGIT_7 00000116
+
+Symbol: DIGIT_7
+   Definitions
+      At line 213 in file teclado.s
+   Uses
+      At line 59 in file teclado.s
+Comment: DIGIT_7 used once
+DIGIT_7_STR 000001AE
+
+Symbol: DIGIT_7_STR
+   Definitions
+      At line 305 in file teclado.s
+   Uses
+      At line 218 in file teclado.s
+Comment: DIGIT_7_STR used once
+DIGIT_8 00000130
+
+Symbol: DIGIT_8
+   Definitions
+      At line 228 in file teclado.s
+   Uses
+      At line 77 in file teclado.s
+Comment: DIGIT_8 used once
+DIGIT_8_STR 000001B0
+
+Symbol: DIGIT_8_STR
+   Definitions
+      At line 306 in file teclado.s
+   Uses
+      At line 233 in file teclado.s
+Comment: DIGIT_8_STR used once
+DIGIT_9 0000014A
+
+Symbol: DIGIT_9
+   Definitions
+      At line 243 in file teclado.s
+   Uses
+      At line 95 in file teclado.s
+Comment: DIGIT_9 used once
+DIGIT_9_STR 000001B2
+
+Symbol: DIGIT_9_STR
+   Definitions
+      At line 307 in file teclado.s
+   Uses
+      At line 248 in file teclado.s
+Comment: DIGIT_9_STR used once
+DIGIT_AST 00000164
+
+Symbol: DIGIT_AST
+   Definitions
+      At line 258 in file teclado.s
+   Uses
+      At line 62 in file teclado.s
+Comment: DIGIT_AST used once
+DIGIT_AST_STR 000001B4
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: DIGIT_AST_STR
+   Definitions
+      At line 309 in file teclado.s
+   Uses
+      At line 263 in file teclado.s
+Comment: DIGIT_AST_STR used once
+DIGIT_HASH 0000017E
+
+Symbol: DIGIT_HASH
+   Definitions
+      At line 273 in file teclado.s
+   Uses
+      At line 98 in file teclado.s
+Comment: DIGIT_HASH used once
+Debouncing 00000190
+
+Symbol: Debouncing
+   Definitions
+      At line 288 in file teclado.s
+   Uses
+      At line 116 in file teclado.s
+      At line 131 in file teclado.s
+      At line 146 in file teclado.s
+      At line 161 in file teclado.s
+      At line 176 in file teclado.s
+      At line 191 in file teclado.s
+      At line 206 in file teclado.s
+      At line 221 in file teclado.s
+      At line 236 in file teclado.s
+      At line 251 in file teclado.s
+      At line 266 in file teclado.s
+      At line 279 in file teclado.s
+
+MapMatrixKeyboard 00000000
+
+Symbol: MapMatrixKeyboard
+   Definitions
+      At line 44 in file teclado.s
+   Uses
+      At line 30 in file teclado.s
+Comment: MapMatrixKeyboard used once
+26 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+CLOSING 00000004
+
+Symbol: CLOSING
+   Definitions
+      At line 12 in file teclado.s
+   Uses
+      At line 277 in file teclado.s
+Comment: CLOSING used once
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+LCD_PrintString 00000000
+
+Symbol: LCD_PrintString
+   Definitions
+      At line 36 in file teclado.s
+   Uses
+      At line 114 in file teclado.s
+      At line 129 in file teclado.s
+      At line 144 in file teclado.s
+      At line 159 in file teclado.s
+      At line 174 in file teclado.s
+      At line 189 in file teclado.s
+      At line 204 in file teclado.s
+      At line 219 in file teclado.s
+      At line 234 in file teclado.s
+      At line 249 in file teclado.s
+      At line 264 in file teclado.s
+
+PortL_Input 00000000
+
+Symbol: PortL_Input
+   Definitions
+      At line 35 in file teclado.s
+   Uses
+      At line 50 in file teclado.s
+      At line 68 in file teclado.s
+      At line 86 in file teclado.s
+
+PortM_Output 00000000
+
+Symbol: PortM_Output
+   Definitions
+      At line 34 in file teclado.s
+   Uses
+      At line 49 in file teclado.s
+      At line 67 in file teclado.s
+      At line 85 in file teclado.s
+
+SysTick_Wait1ms 00000000
+
+Symbol: SysTick_Wait1ms
+   Definitions
+      At line 37 in file teclado.s
+   Uses
+      At line 292 in file teclado.s
+Comment: SysTick_Wait1ms used once
+4 symbols
+368 symbols in table

@@ -104,7 +104,7 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
             STR     R1, [R0]                        ;Guarda no registrador PCTL da porta F da memória
 ; 4. DIR para 0 se for entrada, 1 se for saída
             LDR     R0, =GPIO_PORTN_AHB_DIR_R		;Carrega o R0 com o endereço do DIR para a porta F
-			MOV     R1, #2_00010001					;PF4 & PF0 para LED
+			MOV     R1, #2_00001001					;PF4 & PF0 para LED
             STR     R1, [R0]						;Guarda no registrador
 			; O certo era verificar os outros bits da PF para não transformar entradas em saídas desnecessárias
             LDR     R0, =GPIO_PORTJ_AHB_DIR_R		;Carrega o R0 com o endereço do DIR para a porta J
@@ -119,7 +119,7 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
             STR     R1, [R0]                        ;Escreve na porta
 ; 6. Setar os bits de DEN para habilitar I/O digital
             LDR     R0, =GPIO_PORTN_AHB_DEN_R			;Carrega o endereço do DEN
-            MOV     R1, #2_00010001                     ;Ativa os pinos PF0 e PF4 como I/O Digital
+            MOV     R1, #2_00001001                     ;Ativa os pinos PF0 e PF4 como I/O Digital
             STR     R1, [R0]							;Escreve no registrador da memória funcionalidade digital 
  
             LDR     R0, =GPIO_PORTJ_AHB_DEN_R			;Carrega o endereço do DEN
@@ -203,13 +203,13 @@ GPIOPortJ_Handler
 ; Função PortF_Output
 ; Parâmetro de entrada: R0 --> se os BIT4 e BIT0 estão ligado ou desligado
 ; Parâmetro de saída: Não tem
-PortF_Output
+PortN_Output
 	LDR	R1, =GPIO_PORTN_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
-	BIC R2, #2_00010001                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 11101110
+	BIC R2, #2_00001001                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 11101110
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos F4 e F0
+	STR R0, [R1]                            ;Escreve na porta N o barramento de dados dos pinos F4 e F0
 	BX LR									;Retorno
 
 ; -------------------------------------------------------------------------------

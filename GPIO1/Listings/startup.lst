@@ -972,17 +972,17 @@ ARM Macro Assembler    Page 15
   585 0000001C         ;*******************************************************
                        ***********************
   586 0000001C                 END
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --depen
 
 
 
 ARM Macro Assembler    Page 16 
 
 
-interwork --depend=.\objects\startup.d -o.\objects\startup.o -IC:\Users\Marcell
-a\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefin
-e="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C129
-4NCPDT SETA 1" --list=.\listings\startup.lst startup.s
+d=.\objects\startup.d -o.\objects\startup.o -IC:\Users\suzib\AppData\Local\Arm\
+Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" --
+predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SETA 1" --lis
+t=.\listings\startup.lst startup.s
 
 
 
