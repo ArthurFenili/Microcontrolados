@@ -9,7 +9,7 @@
 ; Declara??es EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
-CLOSING EQU 4
+COFRE_FECHANDO EQU 0x2
 ; -------------------------------------------------------------------------------
 ; ?rea de Dados - Declara??es de vari?veis
 		AREA  DATA, ALIGN=2
@@ -274,7 +274,7 @@ DIGIT_HASH
 	PUSH {LR}
 	
 	CMP R7, #4				; Verifica se 4 d?gitos j? foram inseridos
-	MOVHS R5, #CLOSING		; Senha de 4 d?gitos inserida, coloca o cofre em processo de fechamento
+	MOVHS R5, #COFRE_FECHANDO; Senha de 4 d?gitos inserida, coloca o cofre em processo de fechamento
 	
 	BL Debouncing			; Trata o bouncing da tecla via software
 	
