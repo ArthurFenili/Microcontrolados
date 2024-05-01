@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\gpio.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\gpio.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Apr 23 12:06:29 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Apr 30 16:59:45 2024
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -14,24 +14,28 @@ Functions with no stack information
 </H3><UL>
  <LI><a href="#[6b]">Reset_Handler</a>
  <LI><a href="#[6d]">GPIO_Init</a>
- <LI><a href="#[7a]">PortJ_Input</a>
- <LI><a href="#[75]">PortK_Output</a>
+ <LI><a href="#[7a]">PortA_Output</a>
+ <LI><a href="#[7b]">PortJ_Input</a>
+ <LI><a href="#[3d]">GPIOPortJ_Handler</a>
+ <LI><a href="#[78]">PortK_Output</a>
  <LI><a href="#[79]">PortL_Input</a>
- <LI><a href="#[74]">PortM_Output</a>
+ <LI><a href="#[77]">PortM_Output</a>
+ <LI><a href="#[7c]">PortP_Output</a>
+ <LI><a href="#[7d]">PortQ_Output</a>
  <LI><a href="#[6c]">Start</a>
- <LI><a href="#[7b]">DisableInterrupts</a>
+ <LI><a href="#[7e]">DisableInterrupts</a>
  <LI><a href="#[6e]">EnableInterrupts</a>
- <LI><a href="#[7c]">StartCritical</a>
- <LI><a href="#[7d]">EndCritical</a>
- <LI><a href="#[7e]">WaitForInterrupt</a>
+ <LI><a href="#[7f]">StartCritical</a>
+ <LI><a href="#[80]">EndCritical</a>
+ <LI><a href="#[81]">WaitForInterrupt</a>
  <LI><a href="#[6f]">PLL_Init</a>
  <LI><a href="#[70]">SysTick_Init</a>
- <LI><a href="#[76]">SysTick_Wait1ms</a>
+ <LI><a href="#[74]">SysTick_Wait1ms</a>
  <LI><a href="#[71]">LCD_Init</a>
- <LI><a href="#[77]">LCD_Line2</a>
- <LI><a href="#[78]">LCD_PrintString</a>
- <LI><a href="#[73]">LCD_Reset</a>
- <LI><a href="#[72]">MapMatrixKeyboard</a>
+ <LI><a href="#[76]">LCD_Line2</a>
+ <LI><a href="#[73]">LCD_PrintString</a>
+ <LI><a href="#[72]">LCD_Reset</a>
+ <LI><a href="#[75]">MapMatrixKeyboard</a>
 </UL>
 </UL>
 <P>
@@ -79,7 +83,7 @@ Function Pointers
  <LI><a href="#[28]">GPIOPortF_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[29]">GPIOPortG_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[2a]">GPIOPortH_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
- <LI><a href="#[3d]">GPIOPortJ_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
+ <LI><a href="#[3d]">GPIOPortJ_Handler</a> from gpio.o(.text) referenced from startup.o(RESET)
  <LI><a href="#[3e]">GPIOPortK_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[3f]">GPIOPortL_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[50]">GPIOPortM_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
@@ -310,9 +314,6 @@ Global Symbols
 <P><STRONG><a name="[2a]"></a>GPIOPortH_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
-<P><STRONG><a name="[3d]"></a>GPIOPortJ_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
-<BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
-</UL>
 <P><STRONG><a name="[3e]"></a>GPIOPortK_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
@@ -532,43 +533,55 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[7a]"></a>PortJ_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+<P><STRONG><a name="[7a]"></a>PortA_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
 
-<P><STRONG><a name="[75]"></a>PortK_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<P><STRONG><a name="[7b]"></a>PortJ_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[3d]"></a>GPIOPortJ_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
+</UL>
+<P><STRONG><a name="[78]"></a>PortK_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
 </UL>
 
 <P><STRONG><a name="[79]"></a>PortL_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
+<BR><BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
 </UL>
 
-<P><STRONG><a name="[74]"></a>PortM_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
+<P><STRONG><a name="[77]"></a>PortM_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
 </UL>
 
+<P><STRONG><a name="[7c]"></a>PortP_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[7d]"></a>PortQ_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
 <P><STRONG><a name="[6c]"></a>Start</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, main.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
+<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PLL_Init
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
-<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Reset
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Reset
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_PrintString
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Line2
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
 </UL>
 
-<P><STRONG><a name="[7b]"></a>DisableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[7e]"></a>DisableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
 <P><STRONG><a name="[6e]"></a>EnableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 
-<P><STRONG><a name="[7c]"></a>StartCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[7f]"></a>StartCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
-<P><STRONG><a name="[7d]"></a>EndCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[80]"></a>EndCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
-<P><STRONG><a name="[7e]"></a>WaitForInterrupt</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[81]"></a>WaitForInterrupt</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
 <P><STRONG><a name="[6f]"></a>PLL_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
@@ -578,42 +591,46 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[76]"></a>SysTick_Wait1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
-<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Reset
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_PrintString
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Line2
+<P><STRONG><a name="[74]"></a>SysTick_Wait1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Reset
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_PrintString
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Line2
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
 <P><STRONG><a name="[71]"></a>LCD_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
-<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortM_Output
-<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortK_Output
+<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortM_Output
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortK_Output
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[77]"></a>LCD_Line2</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
-</UL>
-
-<P><STRONG><a name="[78]"></a>LCD_PrintString</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
-</UL>
-<BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
-</UL>
-
-<P><STRONG><a name="[73]"></a>LCD_Reset</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+<P><STRONG><a name="[76]"></a>LCD_Line2</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[72]"></a>MapMatrixKeyboard</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, teclado.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_PrintString
-<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortM_Output
+<P><STRONG><a name="[73]"></a>LCD_PrintString</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MapMatrixKeyboard
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
+<P><STRONG><a name="[72]"></a>LCD_Reset</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
+<P><STRONG><a name="[75]"></a>MapMatrixKeyboard</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, teclado.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_PrintString
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortM_Output
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortL_Input
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
