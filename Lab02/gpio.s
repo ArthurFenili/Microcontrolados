@@ -7,8 +7,14 @@
 ; -------------------------------------------------------------------------------
 ; Declara??es EQU - Defines
 ; ========================
-LOCKED			EQU 6
-LOCKED_MASTER	EQU 7
+INVALID_DIGIT			EQU 256 ; Representa um d?gito inv?lido do teclado matricial
+INVALID_PW_CHAR			EQU -1	; Representa um caractere impossível de estar na senha
+INICIO  				EQU 0
+CONFIG_SENHA 			EQU 1
+COFRE_FECHANDO 			EQU 2
+COFRE_FECHADO 			EQU 3
+COFRE_TRAVADO           EQU 4
+DESTRAVA_COFRE          EQU 5
 ; ========================
 ; Defini??es dos Registradores Gerais
 ; All register values were taken from tm4c1294ncpdt.h - TM4C1294NCPDT Register Definitions
@@ -114,6 +120,7 @@ GPIO_PORTJ_IBE_R			EQU	   0x40060408
 GPIO_PORTJ_IEV_R			EQU    0x4006040C
 GPIO_PORTJ_IM_R				EQU    0x40060410
 GPIO_PORTJ_ICR_R			EQU    0x4006041C
+GPIO_PORTJ_RIS_R            EQU    0x40060414
 NVIC_PRI12_R				EQU    0xE000E430
 NVIC_EN1_R					EQU    0xE000E104
 
@@ -134,7 +141,8 @@ NVIC_EN1_R					EQU    0xE000E104
 		EXPORT GPIOPortJ_Handler	; Permite chamar GPIOPortJ_Handler de outro arquivo
 
 		; Se chamar alguma fun??o externa
-		IMPORT EnableInterrupts		; Chama EnableInterrupts do arquivo "startup.s"
+		IMPORT ModificaSenhaMestra
+		IMPORT DestravaCofre
 
 ;--------------------------------------------------------------------------------
 ; Fun??o GPIO_Init
@@ -220,7 +228,7 @@ EsperaGPIO  LDR     R1, [R0]						; L? da mem?ria o conte?do do endere?o do regi
 			
 			; O certo era verificar os outros bits da PJ para n?o transformar entradas em sa?das desnecess?rias
 			LDR     R0, =GPIO_PORTJ_AHB_DIR_R		; Carrega o R0 com o endere?o do DIR para a porta J
-			MOV     R1, #2_0               			; PJ0
+			MOV     R1, #2_00000000               			; PJ0
             STR     R1, [R0]						; Guarda no registrador PCTL da porta J da mem?ria
 			
 			LDR     R0, =GPIO_PORTK_DIR_R			; Carrega o R0 com o endere?o do DIR para a porta K
@@ -277,7 +285,7 @@ EsperaGPIO  LDR     R1, [R0]						; L? da mem?ria o conte?do do endere?o do regi
 			
 			LDR     R0, =GPIO_PORTJ_AHB_DEN_R		; Carrega o endere?o do DEN
 			LDR     R1, [R0]						; L? para carregar o valor anterior da porta inteira
-            ORR     R1, R1, #2_00000001             ; Faz o OR bit a bit para manter os valores anteriores e setar somente PJ0
+            ORR     R1, R1, #2_00000011             ; Faz o OR bit a bit para manter os valores anteriores e setar somente PJ0
             STR     R1, [R0]						; Escreve no registrador da mem?ria funcionalidade digital
 			
 			LDR     R0, =GPIO_PORTK_DEN_R			; Carrega o endere?o do DEN
@@ -307,7 +315,7 @@ EsperaGPIO  LDR     R1, [R0]						; L? da mem?ria o conte?do do endere?o do regi
 			
 ; 7. Para habilitar resistor de pull-up interno, setar PUR para 1
 			LDR     R0, =GPIO_PORTJ_AHB_PUR_R		; Carrega o endere?o do PUR para a porta J
-			MOV     R1, #2_0001						; Habilitar funcionalidade digital de resistor de pull-up PJ0
+			MOV     R1, #2_0011						; Habilitar funcionalidade digital de resistor de pull-up PJ0
             STR     R1, [R0]						; Escreve no registrador da mem?ria do resistor de pull-up
 			
 			LDR     R0, =GPIO_PORTL_PUR_R			; Carrega o endere?o do PUR para a porta L
@@ -316,40 +324,39 @@ EsperaGPIO  LDR     R1, [R0]						; L? da mem?ria o conte?do do endere?o do regi
 
 ; 8. Interrup??es
 			LDR R1, =GPIO_PORTJ_IM_R				
-			MOV R0, #2_0 							; Desabilita a interrup??o na porta J0
+			MOV R0, #2_00000000 							; Desabilita a interrup??o na porta J0
 			STR R0, [R1] 
 	
-			MOV R1, #2_0
+			MOV R1, #2_00000000
 			LDR R0, =GPIO_PORTJ_IS_R				; 0 para interrup??o de borda e 1 para n?vel
 			STR R1, [R0]
 			
-			MOV R1, #2_0
+			MOV R1, #2_00000000
 			LDR R0, =GPIO_PORTJ_IBE_R				; 0 para borda ?nica
 			STR R1, [R0]
 			
-			MOV R1, #2_0
-			LDR R0, =GPIO_PORTJ_IEV_R				; 0 para borda de descida
+			MOV R1, #2_00000010
+			LDR R0, =GPIO_PORTJ_IEV_R				; 1 para borda de subida
 			STR R1, [R0]
 			
 			LDR R1, =GPIO_PORTJ_ICR_R				; Configura a interrup??o na porta PJ0
-			MOV R0, #2_1
+			MOV R0, #2_00000011
 			STR R0, [R1]
 			
 			LDR R1, =GPIO_PORTJ_IM_R				; Habilita a interrup??o na porta J0
-			MOV R0, #2_1
-			STR R0, [R1]
-			
-			LDR R1, =NVIC_PRI12_R					; Configura prioridade 5 nos bits 29 a 31
-			MOV R0, #0xA0000000
+			MOV R0, #2_00000011
 			STR R0, [R1]
 			
 			LDR R1, =NVIC_EN1_R						; Habilita a interrup??o no PortJ
-			MOV R0, #0x80000
+			MOV R0, #1
+			LSL R0, R0, #19
 			STR R0, [R1]
 			
-			PUSH {LR}
-			BL EnableInterrupts						; Liga a chave das interrup??es
-			POP {LR}
+			LDR R1, =NVIC_PRI12_R					; Configura prioridade 5 nos bits 29 a 31
+			MOV R0, #5
+			LSL R0, R0, #29
+			STR R0, [R1]
+		
 			
 			BX LR
 
@@ -378,13 +385,18 @@ PortJ_Input
 ; Par?metro de entrada: N?o tem
 ; Par?metro de sa?da: R0 --> o valor a ser atualizado
 GPIOPortJ_Handler
-	; O certo seria testar se a interrup??o foi causada por PJ1 ou PJ0 atrav?s do GPIORIS
-	LDR R1, =GPIO_PORTJ_ICR_R
-	MOV R0, #0x00000001						; PJ0
-	STR R0, [R1] 							; Limpa a interrup??o (ACK)
+	LDR R1, =GPIO_PORTJ_RIS_R
+	LDR R0, [R1]
 	
-	CMP R5, #LOCKED_MASTER					; Verifica se a interrup??o aconteceu com o cofre travado com senha mestre
-	MOVEQ R5, #LOCKED						; Se sim, baixa o estado para travado apenas
+	CMP R0, #1
+	IT EQ
+		MOVEQ R5, #DESTRAVA_COFRE
+	
+	CMP R0, #2
+	BEQ ModificaSenhaMestra
+	
+	LDR R1, =GPIO_PORTJ_ICR_R
+	STR R0, [R1]
 	
 	BX LR 									; Retorna
 
