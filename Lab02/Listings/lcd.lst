@@ -269,11 +269,11 @@ ARM Macro Assembler    Page 5
                                                             da se??o est? alinh
                                                             ada 
   163 000000C4                 END                          ;Fim do arquivo
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\lcd.d -o.\objects\lcd.o -IC:\Users\suzib\AppData\L
-ocal\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL S
-ETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SETA
- 1" --list=.\listings\lcd.lst lcd.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\lcd.d -o.\objects\lcd.o -IC:\Users\Arthur\AppData\Local\Arm\
+Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" --
+predefine="__UVISION_VERSION SETA 539" --predefine="TM4C1294NCPDT SETA 1" --lis
+t=.\listings\lcd.lst lcd.s
 
 
 
