@@ -142,10 +142,13 @@ NVIC_EN1_R					EQU    0xE000E104
 		EXPORT PortP_Output			; Permite chamar PortP_Output de outro arquivo
 		EXPORT PortQ_Output			; Permite chamar PortQ_Output de outro arquivo
 		EXPORT GPIOPortJ_Handler	; Permite chamar GPIOPortJ_Handler de outro arquivo
+		EXPORT LED_Output
 
 		; Se chamar alguma fun??o externa
 		IMPORT ModificaSenhaMestra
 		IMPORT DestravaCofre
+		IMPORT Pisca_Transistor_PP5
+		
 
 ;--------------------------------------------------------------------------------
 ; Fun??o GPIO_Init
@@ -461,7 +464,26 @@ PortQ_Output
 	ORR R0, R0, R2                          ; Fazer o OR do lido pela porta com o par?metro de entrada
 	STR R0, [R1]                            ; Escreve na porta Q
 	BX LR									; Retorna
+
+LED_Output
+	PUSH {LR}
+	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register
+	LDR	R2, =GPIO_PORTQ_DATA_R		    	;Carrega o valor do offset do data register
+                        
+	LDR R3, [R1]
+	LDR R0, [R2]
+
+	MOVEQ R3, #2_11110000					;carrega em R3 e R4 os bits dos leds que devem piscar
+	MOVEQ R0, #2_00001111
 	
+	STR R3, [R1]							; carrega no DATA do portA o bit do led da esquerda que deve piscar
+	STR R0, [R2]							; carrega no DATA do portQ o bit do led da direita que deve piscar
+	
+	BL Pisca_Transistor_PP5					; chama a subrotina para piscar o transistor dos leds
+	POP {LR}
+	BX LR		
+
+
 ; -------------------------------------------------------------------------------
 
     ALIGN                           ; garante que o fim da se??o est? alinhada 

@@ -48,6 +48,7 @@ PASSWORDS SPACE 8			; 4 bytes para a senha do usuário e 4 bytes para a senha mes
 			                        ; outro arquivo. No caso startup.s
 		EXPORT ModificaSenhaMestra
 		EXPORT DestravaCofre
+		EXPORT Pisca_Transistor_PP5
 									
 		; Se chamar alguma fun??o externa	
         ;IMPORT <func>              ; Permite chamar dentro deste arquivo uma 
@@ -67,6 +68,7 @@ PASSWORDS SPACE 8			; 4 bytes para a senha do usuário e 4 bytes para a senha mes
 		IMPORT LCD_PrintString
 		
 		IMPORT MapMatrixKeyboard
+		IMPORT LED_Output
 
 ;?Cofre aberto, digite nova senha para fechar o cofre?.
 cofre_aberto DCB "Cofre aberto    ", 0
@@ -122,7 +124,7 @@ MainLoop
 	CMP R5, #DESTRAVA_COFRE
 	BEQ DestravaCofre
     CMP R5, #CONFIG_SENHA_MESTRA
-    BEQ ModificaSenhaMestra
+    ;BEQ ModificaSenhaMestra
 	
 	B MainLoop
 
@@ -188,6 +190,8 @@ CofreTravado
 	BL LCD_Reset
 	LDR R4,=cofre_travado ; muda a string que vai pro display
 	BL LCD_PrintString ;imprime nova string
+	BL LED_Output
+
 	B MainLoop
 
 CofreAbrindo
@@ -216,7 +220,6 @@ DestravaCofre
 	BL SysTick_Wait1ms
 	
 	BL LCD_Line2
-	
 	LDR R4, =string_vazia		; Imprime uma string vazia na segunda linha
 	BL LCD_PrintString
 
@@ -342,6 +345,20 @@ SenhaMestraAlterada
 	POP {LR}
 	MOV R0, #2000		 ; seta o tempo de 2s
 	PUSH {LR}
+	BL SysTick_Wait1ms
+	POP {LR}
+	BX LR
+
+
+Pisca_Transistor_PP5
+	MOV R0, #2_00100000
+	PUSH {LR}
+	BL PortP_Output				 ; chama a subrotina para ativar o transistor
+	MOV R0, #500
+	BL SysTick_Wait1ms
+	MOV R0, #2_00000000
+	BL PortP_Output				 ; chama a subrotina para desativar o transistor
+	MOV R0, #500
 	BL SysTick_Wait1ms
 	POP {LR}
 	BX LR
