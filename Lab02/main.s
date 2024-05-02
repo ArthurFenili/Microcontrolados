@@ -202,6 +202,7 @@ CofreAbrindo
 	MOV R5, #INICIO
 	MOV R7, #0				; Zera R7
 	MOV R10, #0				; Zera R10
+	MOV R12, #0
 	
 	B MainLoop
 
@@ -287,7 +288,8 @@ ConferirSenha
 	CMP R10, #4
 	IT EQ
         MOVEQ R5, #COFRE_ABRINDO
-
+	BEQ CofreAbrindo
+		
 	MOV R7, #0
 	ADD R12, R12, #1
 	CMP R12, #3

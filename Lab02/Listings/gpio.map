@@ -51,7 +51,7 @@ Image Symbol Table
     $v0                                      0x00000220   Number         0  gpio.o(.text)
     .text                                    0x00000220   Section      724  gpio.o(.text)
     cofre_aberto                             0x000004f4   Data          17  main.o(.text)
-    .text                                    0x000004f4   Section      832  main.o(.text)
+    .text                                    0x000004f4   Section      840  main.o(.text)
     cofre_abrindo                            0x00000505   Data          17  main.o(.text)
     digite_senha                             0x00000516   Data          17  main.o(.text)
     string_vazia                             0x00000527   Data          17  main.o(.text)
@@ -62,27 +62,27 @@ Image Symbol Table
     cofre_travado                            0x0000057c   Data          17  main.o(.text)
     digite_senha_mestra                      0x0000058d   Data          17  main.o(.text)
     $v0                                      0x0000059e   Number         0  main.o(.text)
-    $v0                                      0x00000834   Number         0  utils.o(.text)
-    .text                                    0x00000834   Section      484  utils.o(.text)
-    $v0                                      0x00000a18   Number         0  lcd.o(.text)
-    .text                                    0x00000a18   Section      196  lcd.o(.text)
-    $v0                                      0x00000adc   Number         0  teclado.o(.text)
-    .text                                    0x00000adc   Section      652  teclado.o(.text)
-    DIGIT_0_STR                              0x00000d0e   Data           2  teclado.o(.text)
-    DIGIT_1_STR                              0x00000d10   Data           2  teclado.o(.text)
-    DIGIT_2_STR                              0x00000d12   Data           2  teclado.o(.text)
-    DIGIT_3_STR                              0x00000d14   Data           2  teclado.o(.text)
-    DIGIT_4_STR                              0x00000d16   Data           2  teclado.o(.text)
-    DIGIT_5_STR                              0x00000d18   Data           2  teclado.o(.text)
-    DIGIT_6_STR                              0x00000d1a   Data           2  teclado.o(.text)
-    DIGIT_7_STR                              0x00000d1c   Data           2  teclado.o(.text)
-    DIGIT_8_STR                              0x00000d1e   Data           2  teclado.o(.text)
-    DIGIT_9_STR                              0x00000d20   Data           2  teclado.o(.text)
-    DIGIT_A_STR                              0x00000d22   Data           2  teclado.o(.text)
-    DIGIT_B_STR                              0x00000d24   Data           2  teclado.o(.text)
-    DIGIT_C_STR                              0x00000d26   Data           2  teclado.o(.text)
-    DIGIT_D_STR                              0x00000d28   Data           2  teclado.o(.text)
-    DIGIT_AST_STR                            0x00000d2a   Data           2  teclado.o(.text)
+    $v0                                      0x0000083c   Number         0  utils.o(.text)
+    .text                                    0x0000083c   Section      484  utils.o(.text)
+    $v0                                      0x00000a20   Number         0  lcd.o(.text)
+    .text                                    0x00000a20   Section      196  lcd.o(.text)
+    $v0                                      0x00000ae4   Number         0  teclado.o(.text)
+    .text                                    0x00000ae4   Section      652  teclado.o(.text)
+    DIGIT_0_STR                              0x00000d16   Data           2  teclado.o(.text)
+    DIGIT_1_STR                              0x00000d18   Data           2  teclado.o(.text)
+    DIGIT_2_STR                              0x00000d1a   Data           2  teclado.o(.text)
+    DIGIT_3_STR                              0x00000d1c   Data           2  teclado.o(.text)
+    DIGIT_4_STR                              0x00000d1e   Data           2  teclado.o(.text)
+    DIGIT_5_STR                              0x00000d20   Data           2  teclado.o(.text)
+    DIGIT_6_STR                              0x00000d22   Data           2  teclado.o(.text)
+    DIGIT_7_STR                              0x00000d24   Data           2  teclado.o(.text)
+    DIGIT_8_STR                              0x00000d26   Data           2  teclado.o(.text)
+    DIGIT_9_STR                              0x00000d28   Data           2  teclado.o(.text)
+    DIGIT_A_STR                              0x00000d2a   Data           2  teclado.o(.text)
+    DIGIT_B_STR                              0x00000d2c   Data           2  teclado.o(.text)
+    DIGIT_C_STR                              0x00000d2e   Data           2  teclado.o(.text)
+    DIGIT_D_STR                              0x00000d30   Data           2  teclado.o(.text)
+    DIGIT_AST_STR                            0x00000d32   Data           2  teclado.o(.text)
     PASSWORDS                                0x20000000   Data           8  main.o(DATA)
     DATA                                     0x20000000   Section        8  main.o(DATA)
     StackMem                                 0x20000008   Data           0  startup.o(STACK)
@@ -210,17 +210,17 @@ Image Symbol Table
     PortP_Output                             0x000003fb   Thumb Code     0  gpio.o(.text)
     PortQ_Output                             0x0000040b   Thumb Code     0  gpio.o(.text)
     Start                                    0x0000059f   Thumb Code     0  main.o(.text)
-    DestravaCofre                            0x000006d3   Thumb Code     0  main.o(.text)
-    ModificaSenhaMestra                      0x00000701   Thumb Code     0  main.o(.text)
-    PLL_Init                                 0x00000835   Thumb Code     0  utils.o(.text)
-    SysTick_Init                             0x0000095d   Thumb Code     0  utils.o(.text)
-    SysTick_Wait                             0x0000097f   Thumb Code     0  utils.o(.text)
-    SysTick_Wait1ms                          0x00000997   Thumb Code     0  utils.o(.text)
-    LCD_Init                                 0x00000a19   Thumb Code     0  lcd.o(.text)
-    LCD_Line2                                0x00000a8d   Thumb Code     0  lcd.o(.text)
-    LCD_PrintString                          0x00000aa5   Thumb Code     0  lcd.o(.text)
-    LCD_Reset                                0x00000ac3   Thumb Code     0  lcd.o(.text)
-    MapMatrixKeyboard                        0x00000add   Thumb Code     0  teclado.o(.text)
+    DestravaCofre                            0x000006d7   Thumb Code     0  main.o(.text)
+    ModificaSenhaMestra                      0x00000705   Thumb Code     0  main.o(.text)
+    PLL_Init                                 0x0000083d   Thumb Code     0  utils.o(.text)
+    SysTick_Init                             0x00000965   Thumb Code     0  utils.o(.text)
+    SysTick_Wait                             0x00000987   Thumb Code     0  utils.o(.text)
+    SysTick_Wait1ms                          0x0000099f   Thumb Code     0  utils.o(.text)
+    LCD_Init                                 0x00000a21   Thumb Code     0  lcd.o(.text)
+    LCD_Line2                                0x00000a95   Thumb Code     0  lcd.o(.text)
+    LCD_PrintString                          0x00000aad   Thumb Code     0  lcd.o(.text)
+    LCD_Reset                                0x00000acb   Thumb Code     0  lcd.o(.text)
+    MapMatrixKeyboard                        0x00000ae5   Thumb Code     0  teclado.o(.text)
 
 
 
@@ -230,28 +230,28 @@ Memory Map of the image
 
   Image Entry point : 0x00000209
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000d70, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000d78, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000d68, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000d70, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000000   0x00000220   Code   RO           12  * RESET               startup.o
     0x00000220   0x00000220   0x000002d4   Code   RO            1    .text               gpio.o
-    0x000004f4   0x000004f4   0x00000340   Code   RO            7    .text               main.o
-    0x00000834   0x00000834   0x000001e4   Code   RO           19    .text               utils.o
-    0x00000a18   0x00000a18   0x000000c4   Code   RO           23    .text               lcd.o
-    0x00000adc   0x00000adc   0x0000028c   Code   RO           27    .text               teclado.o
+    0x000004f4   0x000004f4   0x00000348   Code   RO            7    .text               main.o
+    0x0000083c   0x0000083c   0x000001e4   Code   RO           19    .text               utils.o
+    0x00000a20   0x00000a20   0x000000c4   Code   RO           23    .text               lcd.o
+    0x00000ae4   0x00000ae4   0x0000028c   Code   RO           27    .text               teclado.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000d68, Size: 0x00000008, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000d70, Size: 0x00000008, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00000d68   0x00000008   Data   RW            6    DATA                main.o
+    0x20000000   0x00000d70   0x00000008   Data   RW            6    DATA                main.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000008, Load base: 0x00000d70, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000008, Load base: 0x00000d78, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -267,13 +267,13 @@ Image component sizes
 
        724        218          0          0          0        448   gpio.o
        196          2          0          0          0        268   lcd.o
-       832        214          0          8          0        396   main.o
+       840        216          0          8          0        396   main.o
        544        520          0          0       1024        744   startup.o
        652         90          0          0          0        392   teclado.o
        484         92          0          0          0        372   utils.o
 
     ----------------------------------------------------------------------
-      3432       1136          0          8       1024       2620   Object Totals
+      3440       1138          0          8       1024       2620   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -288,15 +288,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3432       1136          0          8       1024       2620   Grand Totals
-      3432       1136          0          8       1024       2620   ELF Image Totals
-      3432       1136          0          8          0          0   ROM Totals
+      3440       1138          0          8       1024       2620   Grand Totals
+      3440       1138          0          8       1024       2620   ELF Image Totals
+      3440       1138          0          8          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3432 (   3.35kB)
+    Total RO  Size (Code + RO Data)                 3440 (   3.36kB)
     Total RW  Size (RW Data + ZI Data)              1032 (   1.01kB)
-    Total ROM Size (Code + RO Data + RW Data)       3440 (   3.36kB)
+    Total ROM Size (Code + RO Data + RW Data)       3448 (   3.37kB)
 
 ==============================================================================
 
