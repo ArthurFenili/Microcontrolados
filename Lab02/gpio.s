@@ -9,12 +9,15 @@
 ; ========================
 INVALID_DIGIT			EQU 256 ; Representa um d?gito inv?lido do teclado matricial
 INVALID_PW_CHAR			EQU -1	; Representa um caractere impossível de estar na senha
+
 INICIO  				EQU 0
 CONFIG_SENHA 			EQU 1
 COFRE_FECHANDO 			EQU 2
 COFRE_FECHADO 			EQU 3
-COFRE_TRAVADO           EQU 4
-DESTRAVA_COFRE          EQU 5
+COFRE_ABRINDO           EQU 4
+COFRE_TRAVADO           EQU 5
+DESTRAVA_COFRE          EQU 6
+CONFIG_SENHA_MESTRA     EQU 7
 ; ========================
 ; Defini??es dos Registradores Gerais
 ; All register values were taken from tm4c1294ncpdt.h - TM4C1294NCPDT Register Definitions
@@ -393,9 +396,12 @@ GPIOPortJ_Handler
 		MOVEQ R5, #DESTRAVA_COFRE
 	
 	CMP R0, #2
-	BEQ ModificaSenhaMestra
+	PUSH {LR}
+	BLEQ ModificaSenhaMestra
+	POP {LR}
 	
-	LDR R1, =GPIO_PORTJ_ICR_R
+	LDR R1, =GPIO_PORTJ_ICR_R				; Configura a interrup??o na porta PJ0
+	MOV R0, #2_00000011
 	STR R0, [R1]
 	
 	BX LR 									; Retorna

@@ -16,12 +16,16 @@
 ; Defini??es de Valores
 INVALID_DIGIT			EQU 256 ; Representa um d?gito inv?lido do teclado matricial
 INVALID_PW_CHAR			EQU -1	; Representa um caractere impossível de estar na senha
+
 INICIO  				EQU 0
 CONFIG_SENHA 			EQU 1
 COFRE_FECHANDO 			EQU 2
 COFRE_FECHADO 			EQU 3
-COFRE_TRAVADO           EQU 4
-DESTRAVA_COFRE          EQU 5
+COFRE_ABRINDO           EQU 4
+COFRE_TRAVADO           EQU 5
+DESTRAVA_COFRE          EQU 6
+CONFIG_SENHA_MESTRA     EQU 7
+
 
 
 ; -------------------------------------------------------------------------------
@@ -71,9 +75,10 @@ digite_senha DCB "Digite a senha  ", 0
 string_vazia DCB "                ", 0
 cofre_fechando DCB "Cofre fechando  ", 0
 cofre_fechado DCB "Cofre fechado   ", 0
-reset_senha_mestra DCB "Reset mestra    ", 0
+reset_senha_mestra DCB "Nova mestra     ", 0
 senha_mestra_alterada DCB "Mestra alterada ", 0
 cofre_travado DCB "Cofre travado   ", 0
+digite_senha_mestra DCB "Digite mestra   ", 0 
 
 ; -------------------------------------------------------------------------------
 ; Fun??o main()
@@ -93,16 +98,15 @@ Start
 	MOV R12, #0             ; Contador da quantidade de erros da senha
 
 	MOV R11, #1
-	STRB R11, [R8, #5]
-	MOV R11, #2
 	STRB R11, [R8, #6]
-	MOV R11, #3
+	MOV R11, #2
 	STRB R11, [R8, #7]
-	MOV R11, #4
+	MOV R11, #3
 	STRB R11, [R8, #8]
+	MOV R11, #4
+	STRB R11, [R8, #9]
 	
 MainLoop
-	
 	CMP R5, #INICIO
 	BEQ EstadoInicial
 	CMP R5, #CONFIG_SENHA
@@ -111,12 +115,15 @@ MainLoop
 	BEQ CofreFechando
 	CMP R5, #COFRE_FECHADO
 	BEQ CofreFechado
+    CMP R5, #COFRE_ABRINDO
+    BEQ CofreAbrindo
 	CMP R5, #COFRE_TRAVADO
 	BEQ CofreTravado
 	CMP R5, #DESTRAVA_COFRE
 	BEQ DestravaCofre
+    CMP R5, #CONFIG_SENHA_MESTRA
+    BEQ ModificaSenhaMestra
 	
-
 	B MainLoop
 
 EstadoInicial
@@ -125,6 +132,7 @@ EstadoInicial
 	BL LCD_PrintString ; imprime mensagem
 	MOV R0, #5000	 ;seta o tempo que vai ficar a mensagem
 	BL SysTick_Wait1ms ;wait
+    B SolicitaSenha
 	
 SolicitaSenha
 	MOV R7, #0
@@ -151,7 +159,7 @@ InserirSenha
 	
 	CMP R5, #COFRE_FECHANDO			; Verifica se o estado do cofre ? fechando 
 	BNE InserirSenha				; Se ainda n?o for, volta para configurar a senha
-	BEQ CofreFechando
+	B MainLoop
 	
 CofreFechando
 	BL LCD_Reset ;limpa o display
@@ -175,17 +183,32 @@ CofreFechado
 	BL SysTick_Wait1ms
 	
 	B PedeSenhaFechado
-	
+
 CofreTravado
 	BL LCD_Reset
 	LDR R4,=cofre_travado ; muda a string que vai pro display
 	BL LCD_PrintString ;imprime nova string
 	B MainLoop
+
+CofreAbrindo
+	BL LCD_Reset 			;limpa o display
+	MOV R0, #1000		 	; seta o tempo  de 1s
+	BL SysTick_Wait1ms
+	LDR R4,=cofre_abrindo 	; muda a string que vai pro display
+	BL LCD_PrintString 		;imprime nova string
+	MOV R0, #5000		 	; seta o tempo de 5s
+	BL SysTick_Wait1ms
+	BL LCD_Reset
+	MOV R5, #INICIO
+	MOV R7, #0				; Zera R7
+	MOV R10, #0				; Zera R10
 	
+	B MainLoop
+
 DestravaCofre
 	BL LCD_Line2				; Coloca o cursor no começo da segunda linha
 	
-	LDR R4, =digite_senha		; Imprime a mensagem de digitar a senha
+	LDR R4, =digite_senha_mestra		; Imprime a mensagem de digitar a senha
 	BL LCD_PrintString
 	
 	MOV R0, #1000		 		; seta o tempo de 0,5s
@@ -200,26 +223,31 @@ DestravaCofre
 	
 	MOV R6, #INVALID_DIGIT	; Nenhum dígito foi lido. Coloca R6 em estado inválido (reset)
 	
-	MOV R7, #4
+	MOV R7, #5
+	MOV R10, #0
 	
 	B ConferirSenhaMestra
-	
-ConferirSenhaMestra
-	BL MapMatrixKeyboard	; Lê o dígito pressionado no teclado e guarda em R6
-	
-	LDRB R9, [R8, R7] 			; coloca em R9 os digitos a senha
-	CMP R6, R9
-	ADDEQ R10, R10, #1			; incrementar contador de acertos se o digito inserido for igual o da memória
-	
-	MOV R6, #INVALID_DIGIT		; Depois de contabilizado, invalida R6 para evitar erros
-	MOV R9, #INVALID_PW_CHAR
-	
-	CMP R10, #4
-	BEQ CofreAbrindo
 
-	CMP R7, #8					; Verifica se 4 d?gitos foram inseridos
-	BLT ConferirSenhaMestra			; Se não, volta para o inicio
+ModificaSenhaMestra
+
+	PUSH {LR}
+	BL LCD_Reset
+	POP {LR}
+	LDR R4,=reset_senha_mestra ; muda a string que vai pro display
+	PUSH {LR}
+	BL LCD_PrintString ;imprime nova string
+	POP {LR}
+	MOV R0, #2000		 ; seta o tempo de 2s
+	PUSH {LR}
+	BL SysTick_Wait1ms
+	POP {LR}
 	
+	PUSH {LR}
+	BL LCD_Line2
+	POP {LR}
+	MOV R7, #5
+	B DigitaSenhaMestra
+
 PedeSenhaFechado
 	BL LCD_Line2				; Coloca o cursor no começo da segunda linha
 	
@@ -242,7 +270,7 @@ PedeSenhaFechado
 	MOV R6, #INVALID_DIGIT	; Nenhum dígito foi lido. Coloca R6 em estado inválido (reset)
 	
 	B ConferirSenha
-	
+
 ConferirSenha
 	BL MapMatrixKeyboard	; Lê o dígito pressionado no teclado e guarda em R6
 	
@@ -253,62 +281,68 @@ ConferirSenha
 	MOV R6, #INVALID_DIGIT		; Depois de contabilizado, invalida R6 para evitar erros
 	MOV R9, #INVALID_PW_CHAR
 	
-	CMP R10, #4
-	BEQ CofreAbrindo
-
 	CMP R7, #4					; Verifica se 4 d?gitos foram inseridos
 	BLT ConferirSenha			; Se não, volta para o inicio
-	
+    
+	CMP R10, #4
+	IT EQ
+        MOVEQ R5, #COFRE_ABRINDO
+
 	MOV R7, #0
 	ADD R12, R12, #1
 	CMP R12, #3
 	BLT PedeSenhaFechado
-	MOV R5, #COFRE_TRAVADO
-
-CofreAbrindo
-	BL LCD_Reset 			;limpa o display
-	MOV R0, #1000		 	; seta o tempo  de 1s
-	BL SysTick_Wait1ms
-	LDR R4,=cofre_abrindo 	; muda a string que vai pro display
-	BL LCD_PrintString 		;imprime nova string
-	MOV R0, #5000		 	; seta o tempo de 5s
-	BL SysTick_Wait1ms
-	BL LCD_Reset
-	MOV R5, #INICIO
-	MOV R7, #0				; Zera R7
-	MOV R10, #0				; Zera R10
+    IT EQ
+	    MOVEQ R5, #COFRE_TRAVADO	
+    
+    B MainLoop
 	
+ConferirSenhaMestra
+	BL MapMatrixKeyboard	; Lê o dígito pressionado no teclado e guarda em R6
+	
+	LDRB R9, [R8, R7] 			; coloca em R9 os digitos a senha
+	CMP R6, R9
+	ADDEQ R10, R10, #1			; incrementar contador de acertos se o digito inserido for igual o da memória
+	
+	MOV R6, #INVALID_DIGIT		; Depois de contabilizado, invalida R6 para evitar erros
+	MOV R9, #INVALID_PW_CHAR
+	
+    CMP R7, #9					; Verifica se 4 d?gitos foram inseridos
+	BLT ConferirSenhaMestra			; Se não, volta para o inicio
+
+	CMP R10, #4
+    ITE EQ
+        MOVEQ R5, #COFRE_ABRINDO
+        MOVNE R5, #DESTRAVA_COFRE
 	B MainLoop
 	
-ModificaSenhaMestra
-	BL LCD_Reset
-	LDR R4,=reset_senha_mestra ; muda a string que vai pro display
-	BL LCD_PrintString ;imprime nova string
-	MOV R0, #2000		 ; seta o tempo de 2s
-	BL SysTick_Wait1ms
-
-	BL LCD_Line2
-	MOV R7, #4
 DigitaSenhaMestra
+	PUSH {LR}
 	BL MapMatrixKeyboard
+	POP {LR}
 	CMP R6, #INVALID_DIGIT
 	IT NE
 		STRBNE R6, [R8, R7] 		; guarda a senha
 	MOV R6, #INVALID_DIGIT		; Depois de contabilizado, invalida R6 para evitar erros
 
-	CMP R7, #8					; Verifica se 4 d?gitos foram inseridos
+	CMP R7, #9					; Verifica se 4 d?gitos foram inseridos
 	BLT DigitaSenhaMestra			; Se não, volta para o inicio	
 	BHI ModificaSenhaMestra
 	BEQ SenhaMestraAlterada
 	
 SenhaMestraAlterada
+	PUSH {LR}
 	BL LCD_Reset
+	POP {LR}
 	LDR R4,=senha_mestra_alterada ; muda a string que vai pro display
+	PUSH {LR}
 	BL LCD_PrintString ;imprime nova string
+	POP {LR}
 	MOV R0, #2000		 ; seta o tempo de 2s
+	PUSH {LR}
 	BL SysTick_Wait1ms
-	B MainLoop
-	
+	POP {LR}
+	BX LR
 
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
