@@ -13,11 +13,14 @@
 #define M (0x4d) //meio passo
 #define AST (0x2a) // *
 
+ uint8_t timer;
+
 void PLL_Init(void);
 void SysTick_Init(void);
 void SysTick_Wait1ms(uint32_t delay);
 void SysTick_Wait1us(uint32_t delay);
 void GPIO_Init(void);
+void TIMER_Init(void);
 
 // Imprime a requisição do sentido, voltas e velocidade no terminal
 uint8_t pedir_sentido(void);
@@ -46,7 +49,6 @@ void transmitir(uint8_t txdata);
 uint8_t receber(void);
 
 // Picar leds
-void LED_Output(uint8_t sentido, uint16_t angulo);
 void Pisca_Transistor(void);
 	
 uint32_t rxfe;
@@ -60,6 +62,7 @@ int main(void)
 	PLL_Init();
 	SysTick_Init();
 	GPIO_Init();
+	TIMER_Init();
 	
 	uint8_t p = receber();
 	transmitir(p); // imprime quebra de linha
@@ -70,7 +73,7 @@ int main(void)
 		int voltas = 0;
 		
 		interrupcao = 0;											//reseta a flag de interrupção
-		GPIO_PORTA_AHB_DATA_R = GPIO_PORTA_AHB_DATA_R & 0x0F;	//reseta os leds
+		GPIO_PORTA_AHB_DATA_R = GPIO_PORTA_AHB_DATA_R & 0x00;	//reseta os leds
 		GPIO_PORTQ_DATA_R = GPIO_PORTQ_DATA_R & 0xF0;  			//reseta os leds 
 		
 		sentido = pedir_sentido(); // pede o sentido de rotação (H - horário ou A - anti horário)
@@ -81,6 +84,7 @@ int main(void)
 		
 		movimenta_motor(sentido, velocidade, voltas);
 		esperar_ast();
+		timer = 0;
 	}
 }
 
@@ -112,6 +116,7 @@ uint16_t pedir_angulo(void){
 }
 void transmitir(uint8_t txdata){
 	txff = UART0_FR_R & 0x20;
+	
 	while(txff){
 		txff = UART0_FR_R & 0x20;}
 	
@@ -133,7 +138,7 @@ uint8_t receber(void) {
 uint8_t pedir_sentido(void) {
 	uint8_t sentido = 0x00;
 	uint8_t s[]={0x53,0x65,0x6e,0x74,0x69,0x64,0x6f,0x3a}; // Guarda os hexadecimais de "Sentido:" no vetor s
- 
+	
 	for(int i=0; i<sizeof(s); i++)
 		transmitir(s[i]); // imprime "Sentido:" no terminal
 	
@@ -215,6 +220,9 @@ int hex_to_int(uint8_t voltas_dezena, uint8_t voltas_unidade) {
 	if(voltas_dezena == 0x31 && voltas_unidade == 0x30) { // 0x31 é 1 em hex e 0x30 é 0 em hex, devolve inteiro 10 caso o numero de voltas seja 10
 		return 10;
 	}
+	else if (voltas_dezena != 0x30) {
+		return 11;
+	}
 	else {
 		return voltas_unidade - '0'; // se não retorna o numero de voltas como inteiro
 	}
@@ -222,6 +230,7 @@ int hex_to_int(uint8_t voltas_dezena, uint8_t voltas_unidade) {
 
 
 void movimenta_motor(uint8_t sentido, uint8_t velocidade, int voltas) {
+	timer = 1;
 	if(sentido == H && velocidade == C)				// Sentido horário e passo completo
 		Motor_HOR_PC(voltas);
 	else if(sentido == H && velocidade == M)	// Sentido horário e meio completo
@@ -288,89 +297,6 @@ void atualizar_terminal(int voltas, uint8_t velocidade, uint8_t sentido){
 	transmitir(0x0d);	// Enter (/r)
 }
 
-void LED_Output(uint8_t sentido, uint16_t angulo){
-
-	uint16_t led47 = GPIO_PORTA_AHB_DATA_R;
-	uint16_t led03 = GPIO_PORTQ_DATA_R;
-
-	if(sentido == H){
-		if(angulo == 45){
-			led47 = led47 | 0x80;
-			led03 = led03 | 0x00;
-		}
-		else if(angulo == 90){
-			led47 = led47 | 0xC0;
-			led03 = led03 | 0x00;
-		}
-		else if(angulo == 135){
-			led47 = led47 | 0xE0;
-			led03 = led03 | 0x00;
-		}
-		else if(angulo == 180){
-			led47 = led47 | 0xF0;
-			led03 = led03 | 0x00;
-		}
-		else if(angulo == 225){
-			led47 = led47 | 0xF0;
-			led03 = led03 | 0x08;
-		}
-		else if(angulo == 270){
-			led47 = led47 | 0xF0;
-			led03 = led03 | 0x0C;
-		}
-		else if(angulo == 315){
-			led47 = led47 | 0xF0;
-			led03 = led03 | 0x0E;
-		}
-		else if(angulo == 360){
-			led47 = led47 | 0xF0;
-			led03 = led03 | 0x0F;
-		}
-	}
-	else if(sentido == A){
-		if(angulo == 45){
-			led47 = led47 | 0x00;
-			led03 = led03 | 0x01;
-		}
-		else if(angulo == 90){
-			led47 = led47 | 0x00;
-			led03 = led03 | 0x03;
-		}
-		else if(angulo == 135){
-			led47 = led47 | 0x00;
-			led03 = led03 | 0x07;
-		}
-		else if(angulo == 180){
-			led47 = led47 | 0x00;
-			led03 = led03 | 0x0F;
-		}
-		else if(angulo == 225){
-			led47 = led47 | 0x10;
-			led03 = led03 | 0x0F;
-		}
-		else if(angulo == 270){
-			led47 = led47 | 0x30;
-			led03 = led03 | 0x0F;
-		}
-		else if(angulo == 315){
-			led47 = led47 | 0x70;
-			led03 = led03 | 0x0F;
-		}
-		else if(angulo == 360){
-			led47 = led47 | 0xF0;
-			led03 = led03 | 0x0F;
-		}
-	}
-
-	GPIO_PORTA_AHB_DATA_R = led47;
-	GPIO_PORTQ_DATA_R = led03;
-	Pisca_Transistor();
-
-	return;
-
-}
-
-
 void Pisca_Transistor(void){
 	PortP_Output(0x20);
 	SysTick_Wait1ms(1);
@@ -391,6 +317,7 @@ void esperar_ast(void) {
 }
 
 void fim(void) {
+	timer = 0;
 	uint8_t f[]={0x46,0x69,0x6d,0x21,0x0a,0x0d}; // Guarda os hexadecimais de "Fim!/n/r" no vetor f
 	for(int i=0; i<6; i++)
 			transmitir(f[i]); // imprime "Fim!/n/r" no terminal
