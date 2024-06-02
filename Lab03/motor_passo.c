@@ -94,7 +94,7 @@ void Motor_AHO_PC(int voltas)
 		sentido = A;
 
 		if (num_voltas == count_voltas) {
-			atualizar_terminal(num_voltas, C, H);
+			atualizar_terminal(num_voltas, C, A);
 			count_voltas++;
 		}
 		if(angulo > count_angulo*15)
@@ -136,7 +136,7 @@ void Motor_HOR_MP(int voltas)
 		sentido = H;
 
 		if (num_voltas == count_voltas) {
-			atualizar_terminal(num_voltas, C, H);
+			atualizar_terminal(num_voltas, M, H);
 			count_voltas++;
 		}
 		if(angulo > count_angulo*15)
@@ -177,7 +177,7 @@ void Motor_AHO_MP(int voltas)
 		sentido = A;
 
 		if (num_voltas == count_voltas) {
-			atualizar_terminal(num_voltas, C, H);
+			atualizar_terminal(num_voltas, M, A);
 			count_voltas++;
 		}
 		if(angulo > count_angulo*15)

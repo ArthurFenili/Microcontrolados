@@ -92,7 +92,7 @@ void GPIO_Init(void)
 	GPIO_PORTN_DEN_R = 0x03; 		   //Bit0 e bit1
 	GPIO_PORTF_AHB_DEN_R = 0x11;	//Bit0 e bit4
 	GPIO_PORTA_AHB_DEN_R = 0xF3;
-	GPIO_PORTA_AHB_DATA_R = 0x00;
+	//GPIO_PORTA_AHB_DATA_R = 0x00;
 	GPIO_PORTH_AHB_DEN_R = 0x0F; //Bit0 a bit3
 	GPIO_PORTQ_DEN_R = 0x0F; //Bit0 a bit3
 	GPIO_PORTP_DEN_R = 0x20; //Bit0 a bit3
@@ -204,47 +204,68 @@ void invertePino0() {
 
 	if(sentido == H){
 		if(angulo < 45){
-			if (led47 != 0x00)
-				led47 = 0x00;
+			if(led47 != 0x01)
+				led47 = 0x01;
 			else
 				led47 = 0x80;
 			led03 = 0x00;
 		}
 		else if(angulo < 90){
-			led47 = 0xC0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xC0;
 			led03 = 0x00;
 		}
 		else if(angulo < 135){
-			led47 = 0xE0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xE0;
 			led03 = 0x00;
 		}
 		else if(angulo < 180){
-			led47 = 0xF0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xF0;
 			led03 = 0x00;
 		}
 		else if(angulo < 225){
-			led47 = 0xF0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xF0;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
 				led03 = 0x08;
 		}
 		else if(angulo < 270){
-			led47 = 0xF0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xF0;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
 				led03 = 0x0C;
 		}
 		else if(angulo < 315){
-			led47 = 0xF0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xF0;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
 				led03 = 0x0E;
 		}
 		else if(angulo < 360){
-			led47 = 0xF0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xF0;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
@@ -281,28 +302,40 @@ void invertePino0() {
 				led03 = 0x0F;
 		}
 		else if(angulo < 225){
-			led47 = 0x10;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0x10;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
 				led03 = 0x0F;
 		}
 		else if(angulo < 270){
-			led47 = 0x30;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0x30;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
 				led03 = 0x0F;
 		}
 		else if(angulo < 315){
-			led47 = 0x70;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0x70;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
 				led03 = 0x0F;
 		}
 		else if(angulo < 360){
-			led47 = 0xF0;
+			if(led47 != 0x01)
+				led47 = 0x01;
+			else
+				led47 = 0xF0;
 			if (led03 != 0x00)
 				led03 = 0x00;
 			else
@@ -319,4 +352,13 @@ void Timer2A_Handler() {
 	TIMER2_ICR_R = 0x01;
 	if(timer)
 		invertePino0();
+	else {
+	uint16_t led47 = GPIO_PORTA_AHB_DATA_R;
+	uint16_t led03 = GPIO_PORTQ_DATA_R;
+	led47 = 0x01;
+	led03 = 0x00;
+	GPIO_PORTA_AHB_DATA_R = led47;
+	GPIO_PORTQ_DATA_R = led03;
+	Pisca_Transistor();
+	}
 }

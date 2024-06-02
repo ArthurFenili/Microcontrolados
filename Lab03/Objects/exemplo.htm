@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\exemplo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\exemplo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Mon May 20 10:35:09 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Tue May 21 11:07:19 2024
 <BR><P>
 <H3>Maximum Stack Usage =         80 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -728,7 +728,7 @@ Global Symbols
 <P><STRONG><a name="[3d]"></a>GPIOPortJ_Handler</STRONG> (Thumb, 56 bytes, Stack size 0 bytes, gpio.o(.text.GPIOPortJ_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
-<P><STRONG><a name="[90]"></a>GPIO_Init</STRONG> (Thumb, 360 bytes, Stack size 32 bytes, gpio.o(.text.GPIO_Init))
+<P><STRONG><a name="[90]"></a>GPIO_Init</STRONG> (Thumb, 356 bytes, Stack size 32 bytes, gpio.o(.text.GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -801,7 +801,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortP_Output
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;invertePino0
+<BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer2A_Handler
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;invertePino0
 </UL>
 
 <P><STRONG><a name="[8c]"></a>PortP_Output</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, gpio.o(.text.PortP_Output))
@@ -812,11 +813,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[21]"></a>Timer2A_Handler</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, gpio.o(.text.Timer2A_Handler))
+<P><STRONG><a name="[21]"></a>Timer2A_Handler</STRONG> (Thumb, 60 bytes, Stack size 0 bytes, gpio.o(.text.Timer2A_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16 + Unknown Stack Size
 <LI>Call Chain = Timer2A_Handler &rArr; invertePino0 &rArr; Pisca_Transistor
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;invertePino0
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Pisca_Transistor
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
@@ -838,7 +840,7 @@ Global Symbols
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_AHO_PC
 </UL>
 
-<P><STRONG><a name="[8d]"></a>invertePino0</STRONG> (Thumb, 336 bytes, Stack size 8 bytes, gpio.o(.text.invertePino0))
+<P><STRONG><a name="[8d]"></a>invertePino0</STRONG> (Thumb, 390 bytes, Stack size 8 bytes, gpio.o(.text.invertePino0))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16 + Unknown Stack Size
 <LI>Call Chain = invertePino0 &rArr; Pisca_Transistor
 </UL>
