@@ -2,4 +2,4 @@
 
 #include <stdint.h>
 
-char keyboard_read(void)
+uint32_t MatrixKeyboard_Map(void);

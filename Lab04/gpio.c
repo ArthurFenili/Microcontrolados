@@ -19,8 +19,6 @@ void LCD_Reset (void);
 void LCD_WriteString (char* str);
 void SysTick_Wait1ms(uint32_t delay);
 
-// Global Flags (external)
-extern volatile int RESET_FLAG;
 
 // -------------------------------------------------------------------------------
 // Fun??o GPIO_Init
@@ -137,7 +135,6 @@ uint32_t PortJ_Input (void)
 
 void GPIOPortJ_Handler (void)
 {
-	RESET_FLAG = 1;			// Raise flag
 	//TIMER0_CTL_R = 0x0; // Desabilita o timer 0
 	//PortF_Output(0x00); // Disable L293
 	

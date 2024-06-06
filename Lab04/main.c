@@ -19,7 +19,7 @@
  uint8_t timer;
  int velocidade;
  int estado;
- char key;
+ uint32_t key;
 
 void PLL_Init(void);
 void SysTick_Init(void);
@@ -27,6 +27,40 @@ void SysTick_Wait1ms(uint32_t delay);
 void SysTick_Wait1us(uint32_t delay);
 void GPIO_Init(void);
 
+void estadoInicial(void) {
+	velocidade = 0;
+	LCD_WriteString("Motor parado    ");
+	SysTick_Wait1ms(1000);
+	LCD_Reset();
+	estado = ESCOLHER_MODOS;
+	
+	
+}
+
+void escolherModos(void) {
+
+	LCD_WriteString("1. Teclado      ");
+	LCD_Line2();
+	LCD_WriteString("2. Potenciometro");
+	SysTick_Wait1ms(1000);
+	
+	
+	while(key != 0xEE && key != 0xDE) {
+			
+		key = MatrixKeyboard_Map();
+		if(key == 0xEE){
+			estado = TECLADO;
+			break;
+		} else if(key == 0xDE) {
+			estado = POTENCIOMETRO;
+			break;
+		}
+	}
+			LCD_WriteString(&key);
+	LCD_Reset();
+	
+	
+}
 
 int main(void)
 {
@@ -34,7 +68,6 @@ PLL_Init();
 	SysTick_Init();
 	GPIO_Init();
 	LCD_Init();
-	Timer_Init();
 	estado = INICIO;
 	
 	while(1) {
@@ -46,50 +79,19 @@ PLL_Init();
 			
 			case ESCOLHER_MODOS:
 				escolherModos();
+				break;
+			
+			case TECLADO:
+				LCD_WriteString("Teclado        ");
+				break;
+			
+			case POTENCIOMETRO:
+				LCD_WriteString("Potenciometro   ");
 		}
 			
 			
-	}
-		
-	
-	
-	
-	
+	}	
 }
-
-void estadoInicial(void) {
-	velocidade = 0;
-	key =
-	LCD_WriteString("Motor parado    ");
-	SysTick_Wait1ms(1000);
-	estado = ESCOLHER_MODOS;
-	
-	
-}
-
-void ecolherModos(void) {
-
-	LCD_WriteString("1. Teclado      ");
-	LCD_Line2();
-	LCD_WriteString("2. Potenciometro");
-	SysTick_Wait1ms(1000);
-	
-	
-	while(key != 1 && key != 2) {
-		key = keyboard_read();
-		
-		if(key == 1){
-			estado = 4;
-			break;
-		} else if(key == 2) {
-			estado = 5
-			break;
-		}
-	}
-	
-	
-}
-
 
 
 
