@@ -10,7 +10,8 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
+      <pArmCC>6160000::V6.16::ARMCLANG</pArmCC>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -373,8 +374,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--entry Reset_Handler --first __Vectors
-</Misc>
+            <Misc></Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -410,6 +410,11 @@
               <FilePath>.\gpio.c</FilePath>
             </File>
             <File>
+              <FileName>teclado.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\teclado.c</FilePath>
+            </File>
+            <File>
               <FileName>lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\lcd.c</FilePath>
@@ -420,19 +425,29 @@
               <FilePath>.\lcd.h</FilePath>
             </File>
             <File>
-              <FileName>teclado.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\teclado.c</FilePath>
-            </File>
-            <File>
               <FileName>teclado.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\teclado.h</FilePath>
             </File>
             <File>
-              <FileName>teclado.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\teclado.s</FilePath>
+              <FileName>gpio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\gpio.h</FilePath>
+            </File>
+            <File>
+              <FileName>conversor_ad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\conversor_ad.c</FilePath>
+            </File>
+            <File>
+              <FileName>conversor_ad.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\conversor_ad.h</FilePath>
+            </File>
+            <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pwm.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -8,19 +8,37 @@
 #include "tm4c1294ncpdt.h"
 #include "lcd.h"
 #include "teclado.h"
+#include "gpio.h"
+#include "conversor_ad.h"
 
-#define AH 0 //anti horario
-#define H 1 //horario
-#define INICIO 2
-#define ESCOLHER_MODOS 3
-#define TECLADO 4
-#define POTENCIOMETRO 5
+#define HORARIO 1
+#define ANTI_HORARIO 2
 
- uint8_t timer;
- int velocidade;
- int estado;
- int sentido;
- uint32_t key;
+
+typedef enum estadoAtual
+{
+	INICIO,
+	ESCOLHER_MODOS,
+	TECLADO,
+	POTENCIOMETRO,
+} estadosAtuais;
+
+estadosAtuais estado = INICIO;
+
+uint8_t timer;
+int velocidade;
+uint32_t modo = 0xFF;
+int sentido = 0;
+int pwm_high = 80000;
+int estado_timer = 0;
+int resetar = 0;
+int adc = 0;
+
+// pwm e timer
+void PWM (int duty_cycle);
+void Timer_Init (void);
+void Timer0A_Handler (void);
+
 
 void PLL_Init(void);
 void SysTick_Init(void);
@@ -30,112 +48,145 @@ void GPIO_Init(void);
 
 void estadoInicial(void) {
 	velocidade = 0;
-	sentido = H;
+	LCD_Reset();
 	LCD_WriteString("Motor parado    ");
 	SysTick_Wait1ms(1000);
-	LCD_Reset();
 	estado = ESCOLHER_MODOS;
-	
-	
 }
 
 void escolherModos(void) {
-
+	LCD_Reset();
 	LCD_WriteString("1. Teclado      ");
 	LCD_Line2();
 	LCD_WriteString("2. Potenciometro");
 	SysTick_Wait1ms(1000);
 	
 	
-	while(key != 0xEE && key != 0xDE) {
-			
-		key = MatrixKeyboard_Map();
-		if(key == 0xEE){
+	while(modo != 0xEE && modo != 0xDE) {
+		modo = MatrixKeyboard_Map();
+		if(modo == 0xEE){
 			estado = TECLADO;
 			break;
-		} else if(key == 0xDE) {
+		} else if(modo == 0xDE) {
 			estado = POTENCIOMETRO;
 			break;
 		}
 	}
 	
-	LCD_Reset();
-	
-	
 }
 
-void escolherSentido(void) {
-
-	LCD_WriteString("1. Anti horario ");
+void modoTeclado(void) {
+	LCD_Reset();
+	LCD_WriteString("Sentido:        ");
+	SysTick_Wait1ms(1000);
+	
+	LCD_Reset();
+	LCD_WriteString("1. Horario      ");
 	LCD_Line2();
-	LCD_WriteString("2. Horario");
+	LCD_WriteString("2. Anti Horario ");
 	SysTick_Wait1ms(1000);
 	
 	
-	while(key != 0xEE && key != 0xDE) {
-			
-		key = MatrixKeyboard_Map();
-		if(key == 0xEE){
-			sentido = AH;
-			break;
-		} else if(key == 0xDE) {
-			sentido = H;
-			break;
+	modo = MatrixKeyboard_Map();
+	
+	while(modo != 0xEE && modo != 0xDE) {
+		modo = MatrixKeyboard_Map();
+		if(modo == 0xEE){
+			sentido = HORARIO;
+		} else if(modo == 0xDE) {
+			sentido = ANTI_HORARIO;
 		}
 	}
+	
+	PortF_Output(0x04);
+	
+	while (!resetar)
+	{
+		modo = MatrixKeyboard_Map();
+		if (modo == 0xEE) {
+			sentido = HORARIO;
+			LCD_Reset();
+			LCD_WriteString("Horario         ");
+			SysTick_Wait1ms(1000);
+		}
+		if (modo == 0xDE) {
+			sentido = ANTI_HORARIO;
+			LCD_Reset();
+			LCD_WriteString("Anti Horario    ");
+			SysTick_Wait1ms(1000);
+		}
+						
+		adc = AD_Convert();
+		PWM(adc);
+						
+		SysTick_Wait1ms(100);
+	}
+	
+	resetar = 0;
+	modo = 0xFF;
+	estado = INICIO;
+	PortF_Output(0x00);
 
+}
+
+void modoPotenciometro(void) {
 	LCD_Reset();
 	
 	
-}
-
-void imprimirVelocidadeSentido(void) {
+	PortF_Output(0x04);
 	
-	if(sentido == AH){
-		LCD_WriteString("Anti horario    ");
-	}else if(sentido == H) {
-		LCD_WriteString("Horario    ");
+	while (!resetar)
+	{		
+		adc = AD_Convert();
+		
+		if (adc <= 2048)
+			sentido = HORARIO;
+		else
+			sentido = ANTI_HORARIO;
+		
+		PWM(adc);
+						
+		SysTick_Wait1ms(100);
 	}
 	
-	LCD_Line2();
-	char *str = (char *)malloc(12 * sizeof(char));
-	sprintf(str, "%d", velocidade);
-	LCD_WriteString(velocidade);
-	SysTick_Wait1ms(1000);
-		
+	resetar = 0;
+	modo = 0xFF;
+	estado = INICIO;
+	PortF_Output(0x00);
 }
+
 int main(void)
 {
-PLL_Init();
+	PLL_Init();
 	SysTick_Init();
 	GPIO_Init();
 	LCD_Init();
-	estado = INICIO;
+	AD_Converter_Init();
+	Timer_Init();
+	PortF_Output(0x04);
+	
 	
 	while(1) {
-			
 		switch(estado){
 			case INICIO:
 				estadoInicial();
-				break;
+			break;
 			
 			case ESCOLHER_MODOS:
 				escolherModos();
-				break;
+			break;
 			
 			case TECLADO:
-				escolherSentido();
-				imprimirVelocidadeSentido();
-				break;
+				modoTeclado();
+			break;
 			
 			case POTENCIOMETRO:
-				imprimirVelocidadeSentido();
+				modoPotenciometro();
+			break;
+			
 		}
-			
-			
 	}	
 }
-
 
 
 
