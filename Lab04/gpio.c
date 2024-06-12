@@ -60,7 +60,7 @@ void GPIO_Init(void)
 	GPIO_PORTP_PCTL_R = 0x00;
 															
 	// 4. DIR para 0 se for entrada, 1 se for sa?da
-	GPIO_PORTE_AHB_DIR_R = 0x03;			// 0x03 = 2_00000011: PE1 e PE0
+	GPIO_PORTE_AHB_DIR_R = 0x06;			// 0x03 = 2_00000011: PE1 e PE0
 	GPIO_PORTF_AHB_DIR_R = 0x04;			// 0x04 = 2_00000100: PF2
 	GPIO_PORTJ_AHB_DIR_R = 0x00;			// 0x00 = 2_00000000
 	GPIO_PORTK_DIR_R = 0xFF;					// 0xFF = 2_11111111: PK7:PK0
@@ -78,7 +78,7 @@ void GPIO_Init(void)
 	GPIO_PORTP_AFSEL_R = 0x00;
 		
 	// 6. Setar os bits de DEN para habilitar I/O digital	
-	GPIO_PORTE_AHB_DEN_R = 0x03;		// 0x03 = 2_00000011: PE1 e PE0
+	GPIO_PORTE_AHB_DEN_R = 0x06;		// 0x03 = 2_00000011: PE1 e PE0
 	GPIO_PORTF_AHB_DEN_R = 0x04;		// 0x04 = 2_00000100: PF2
 	GPIO_PORTJ_AHB_DEN_R = 0x03;		// 0x03 = 2_00000011: PJ1 e PJ0
 	GPIO_PORTK_DEN_R = 0xFF;				// 0xFF = 2_11111111: PK7:PK0
@@ -109,7 +109,7 @@ void PortE_Output (uint32_t data)
 {
 	// Escrita amig?vel
 	uint32_t temp;
-	temp = GPIO_PORTE_AHB_DATA_R & 0xFC;	// Zerar PE1 e PE0
+	temp = GPIO_PORTE_AHB_DATA_R & 0xF9;	// Zerar PE1 e PE0
 	temp = temp | data;
 	GPIO_PORTE_AHB_DATA_R = temp;
 }

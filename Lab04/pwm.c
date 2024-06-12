@@ -94,7 +94,7 @@ void Timer0A_Handler (void)
 	else												// Baixo
 	{
 		if (sentido == HORARIO){PortE_Output(0x02);}
-		if (sentido == ANTI_HORARIO){PortE_Output(0x01);}
+		if (sentido == ANTI_HORARIO){PortE_Output(0x04);}
 		TIMER0_TAILR_R = pwm_high;
 		estado_timer = 1;
 	}

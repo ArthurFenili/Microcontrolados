@@ -107,13 +107,13 @@ void modoTeclado(void) {
 			sentido = HORARIO;
 			LCD_Reset();
 			LCD_WriteString("Horario         ");
-			SysTick_Wait1ms(1000);
+			SysTick_Wait1ms(100);
 		}
 		if (modo == 0xDE) {
 			sentido = ANTI_HORARIO;
 			LCD_Reset();
 			LCD_WriteString("Anti Horario    ");
-			SysTick_Wait1ms(1000);
+			SysTick_Wait1ms(100);
 		}
 						
 		adc = AD_Convert();
@@ -139,10 +139,13 @@ void modoPotenciometro(void) {
 	{		
 		adc = AD_Convert();
 		
-		if (adc <= 2048)
+		if (adc <= 2048){
 			sentido = HORARIO;
-		else
+			adc = 4096 * (2049 - adc)/2048;
+		} else {
 			sentido = ANTI_HORARIO;
+			adc = 2*(adc-2048);
+		}
 		
 		PWM(adc);
 						
@@ -167,6 +170,8 @@ int main(void)
 	
 	
 	while(1) {
+		if(resetar)
+			resetar = 0;
 		switch(estado){
 			case INICIO:
 				estadoInicial();
