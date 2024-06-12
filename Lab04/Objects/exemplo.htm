@@ -3,11 +3,11 @@
 <title>Static Call Graph - [.\Objects\exemplo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\exemplo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Wed Jun 12 14:23:55 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Wed Jun 12 19:32:25 2024
 <BR><P>
 <H3>Maximum Stack Usage =         80 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-__rt_entry_main &rArr; main &rArr; modoTeclado &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
+__rt_entry_main &rArr; main &rArr; modoPotenciometro &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
 <P>
 <H3>
 Functions with no stack information
@@ -630,7 +630,7 @@ Global Symbols
 
 <P><STRONG><a name="[76]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; modoTeclado &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; modoPotenciometro &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -893,7 +893,7 @@ Global Symbols
 
 <P><STRONG><a name="[77]"></a>main</STRONG> (Thumb, 138 bytes, Stack size 0 bytes, main.o(.text.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80 + Unknown Stack Size
-<LI>Call Chain = main &rArr; modoTeclado &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
+<LI>Call Chain = main &rArr; modoPotenciometro &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer_Init
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AD_Converter_Init
@@ -912,8 +912,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[93]"></a>modoPotenciometro</STRONG> (Thumb, 154 bytes, Stack size 32 bytes, main.o(.text.modoPotenciometro))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72 + Unknown Stack Size
+<P><STRONG><a name="[93]"></a>modoPotenciometro</STRONG> (Thumb, 170 bytes, Stack size 40 bytes, main.o(.text.modoPotenciometro))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80 + Unknown Stack Size
 <LI>Call Chain = modoPotenciometro &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM
@@ -925,7 +925,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[94]"></a>modoTeclado</STRONG> (Thumb, 264 bytes, Stack size 40 bytes, main.o(.text.modoTeclado))
+<P><STRONG><a name="[94]"></a>modoTeclado</STRONG> (Thumb, 336 bytes, Stack size 40 bytes, main.o(.text.modoTeclado))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80 + Unknown Stack Size
 <LI>Call Chain = modoTeclado &rArr; PWM &rArr; LCD_WriteString &rArr; strlen
 </UL>

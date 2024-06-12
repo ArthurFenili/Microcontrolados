@@ -23,8 +23,9 @@ extern int estado_timer;
 extern int sentido;
 
 
+
 void PWM (int duty_cycle)
-{
+{	
 	pwm_high = 80000 * duty_cycle/4096;
 	
 	LCD_Reset();

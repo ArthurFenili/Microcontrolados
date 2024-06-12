@@ -33,6 +33,7 @@ int pwm_high = 80000;
 int estado_timer = 0;
 int resetar = 0;
 int adc = 0;
+int prev_adc = 0;
 
 // pwm e timer
 void PWM (int duty_cycle);
@@ -116,9 +117,21 @@ void modoTeclado(void) {
 			SysTick_Wait1ms(100);
 		}
 						
+		prev_adc = adc;
 		adc = AD_Convert();
-		PWM(adc);
-						
+		if(prev_adc < adc) {
+			while (prev_adc < adc) {
+				PWM(prev_adc);
+				prev_adc += 100;
+			}
+		}
+		else {
+			while (prev_adc > adc) {
+				PWM(prev_adc);
+				prev_adc -= 100;
+			}
+		}
+		
 		SysTick_Wait1ms(100);
 	}
 	
@@ -137,6 +150,7 @@ void modoPotenciometro(void) {
 	
 	while (!resetar)
 	{		
+		prev_adc = adc;
 		adc = AD_Convert();
 		
 		if (adc <= 2048){
